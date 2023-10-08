@@ -1,0 +1,37 @@
+{
+  "name": "web",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "1.0.0-beta.0",
+    "@nuxt/image": "1.0.0-rc.3",
+    "@nuxtjs/google-fonts": "^3.0.2",
+    "@nuxtjs/html-validator": "^1.5.2",
+    "@nuxtjs/tailwindcss": "^6.8.0",
+    "@vueuse/core": "^10.5.0",
+    "@vueuse/nuxt": "^10.5.0",
+    "nuxt": "^3.7.4",
+    "nuxt-phosphor-icons": "^1.0.7",
+    "nuxt-security": "^0.14.4",
+    "nuxt-svgo": "^3.5.5"
+  },
+  "dependencies": {
+    "@formkit/auto-animate": "^0.8.0",
+    "@material/material-color-utilities": "^0.2.7",
+    "@material/web": "^1.0.0",
+    "date-fns": "^2.30.0",
+    "swiper": "^10.3.1",
+    "vue-sonner": "^0.4.4",
+    "vue-tippy": "^6.3.1",
+    "zod": "^3.22.4"
+  },
+  "optionalDependencies": {
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.5"
+  }
+}

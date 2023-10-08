@@ -1,0 +1,8 @@
+packages:
+  - android
+  - desktop
+  - web
+
+linkWorkspacePackages: true
+
+useWorkspaces: true
