@@ -82,10 +82,7 @@ watchEffect(() => {
         <p class="text-lg">Loading, hang tight ...</p>
       </div>
 
-      <LazyResult
-        v-else
-        class="flex h-screen justify-between lg:justify-start lg:overflow-hidden"
-      />
+      <LazyResult v-else class="flex flex-col md:flex-row" />
       <LazyModalBase />
     </div>
     <Toast position="bottom-center" rich-colors />
