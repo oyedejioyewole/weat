@@ -15,10 +15,10 @@ whenever(shiftS, () => openModal("settings"));
 </script>
 
 <template>
-  <div v-if="weatherInformation">
+  <div v-if="weatherInformation" class="flex flex-col lg:flex-row">
     <!-- 1st section -->
     <section
-      class="flex basis-1/4 flex-col justify-between rounded-r-3xl border-r-2 border-[--md-sys-color-primary] p-5 dark:bg-black 2xl:p-10"
+      class="flex min-h-screen basis-1/4 flex-col justify-between rounded-r-3xl border-r-2 p-5 dark:bg-black lg:h-auto lg:border-[--md-sys-color-primary] 2xl:p-10"
     >
       <!-- City name & date -->
       <div class="flex items-center justify-between">
@@ -35,8 +35,10 @@ whenever(shiftS, () => openModal("settings"));
 
       <!-- Weather icon -->
       <LazyNuxtImg
+        :alt="weatherInformation.weather.description"
         :src="`https://openweathermap.org/img/wn/${weatherInformation.weather.iconId}@4x.png`"
-        class="mx-auto w-52 2xl:w-[500px]"
+        class="mx-auto"
+        sizes="208px 2xl:500px"
       />
 
       <!-- Temperature & weather description -->
@@ -52,21 +54,21 @@ whenever(shiftS, () => openModal("settings"));
 
     <!-- 2nd section -->
     <section
-      class="flex w-3/4 flex-auto flex-col justify-around rounded-l-3xl bg-[--md-sys-color-primary-container] px-24 pt-10"
+      class="flex w-full flex-col justify-between gap-y-10 rounded-t-3xl bg-[--md-sys-color-primary-container] px-5 py-5 pt-10 lg:w-3/4 lg:justify-around lg:rounded-l-3xl lg:px-24 lg:py-0"
     >
       <!-- Forecast section -->
       <div class="space-y-3">
         <h1 class="text-xl 2xl:text-3xl">Forecast</h1>
 
         <Swiper
-          :slides-per-view="2"
           :grab-cursor="true"
-          :space-between="30"
+          :slides-per-view="2"
+          :space-between="20"
           class="select-none"
         >
           <!-- Forecast -->
           <SwiperSlide
-            class="flex flex-col justify-around rounded-2xl bg-[--md-sys-color-on-primary] p-5 2xl:space-y-36 2xl:p-10"
+            class="mx-10 flex flex-col justify-around rounded-2xl bg-[--md-sys-color-on-primary] p-5 lg:mx-0 2xl:space-y-36 2xl:p-10"
             v-for="(forecast, index) of weatherInformation.forecast"
             :key="index"
           >
@@ -84,11 +86,10 @@ whenever(shiftS, () => openModal("settings"));
 
             <div class="float-right flex items-center">
               <!-- Weather icon -->
-              <NuxtImg
+              <LazyNuxtImg
+                :alt="forecast.weather.description"
                 :src="`https://openweathermap.org/img/wn/${forecast.weather.iconId}@4x.png`"
-                :alt="`${forecast.weather.description}`"
-                class="aspect-square w-14 2xl:w-36"
-                loading="lazy"
+                sizes="56px 2xl:144px"
               />
 
               <!-- Temperature -->
@@ -104,9 +105,10 @@ whenever(shiftS, () => openModal("settings"));
       <div class="space-y-3">
         <h1 class="text-xl 2xl:text-3xl">Atmosphere</h1>
 
-        <ul class="flex gap-x-3">
+        <!-- Clouds, humidity, pressure, visibility -->
+        <ul class="flex flex-wrap gap-3 lg:gap-x-3">
           <li
-            class="flex w-fit flex-col rounded-md bg-[--md-sys-color-on-primary] p-3 2xl:w-1/2 2xl:p-10"
+            class="flex w-1/2 flex-col rounded-md bg-[--md-sys-color-on-primary] p-3 md:w-fit 2xl:w-1/2 2xl:p-10"
           >
             <h2 class="flex items-center gap-x-2 2xl:text-2xl">
               Clouds
@@ -118,7 +120,7 @@ whenever(shiftS, () => openModal("settings"));
             </p>
           </li>
           <li
-            class="flex w-fit flex-col rounded-md bg-[--md-sys-color-on-primary] p-3 2xl:w-1/2 2xl:p-10"
+            class="flex w-[40%] flex-col rounded-md bg-[--md-sys-color-on-primary] p-3 md:w-fit 2xl:w-1/2 2xl:p-10"
           >
             <h2 class="flex items-center gap-x-1 2xl:text-2xl">
               Humidity
@@ -130,7 +132,7 @@ whenever(shiftS, () => openModal("settings"));
             </p>
           </li>
           <li
-            class="flex w-fit flex-col rounded-md bg-[--md-sys-color-on-primary] p-3 2xl:w-1/2 2xl:p-10"
+            class="flex w-[30%] flex-col rounded-md bg-[--md-sys-color-on-primary] p-3 md:w-fit 2xl:w-1/2 2xl:p-10"
           >
             <h2 class="flex items-center gap-x-1 2xl:text-2xl">
               Pressure
@@ -143,7 +145,7 @@ whenever(shiftS, () => openModal("settings"));
             </p>
           </li>
           <li
-            class="flex w-fit flex-col rounded-md bg-[--md-sys-color-on-primary] p-3 2xl:w-1/2 2xl:p-10"
+            class="flex w-[60%] flex-col rounded-md bg-[--md-sys-color-on-primary] p-3 md:w-fit 2xl:w-1/2 2xl:p-10"
           >
             <h2 class="flex items-center gap-x-2 2xl:text-2xl">
               Visibility
@@ -157,7 +159,7 @@ whenever(shiftS, () => openModal("settings"));
         </ul>
       </div>
 
-      <!-- Feels like, wind, sunrise & sunset section -->
+      <!-- Feels like, wind, sunrise, sunset -->
       <div class="flex items-center gap-x-3">
         <!-- Feels like & wind -->
         <ul class="basis-1/2 space-y-3">
