@@ -6,7 +6,7 @@ export const useGetIp = async () => {
       const { $toast } = useNuxtApp();
 
       $toast.error("Couldn't find your location", {
-        description: "Trying again",
+        description: "Attempting again",
       });
     },
     retry: 1,

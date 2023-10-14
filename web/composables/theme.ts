@@ -15,8 +15,6 @@ export const useSetTheme = () => {
     colors[colorName] = hexFromArgb(schemes.light[colorName]);
   });
 
-  console.log(colors);
-
   document.documentElement.style.setProperty(
     "--md-sys-color-primary",
     colors.primary,

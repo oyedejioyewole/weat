@@ -18,7 +18,7 @@ whenever(shiftS, () => openModal("settings"));
   <div v-if="weatherInformation">
     <!-- 1st section -->
     <section
-      class="flex flex-none basis-1/4 flex-col justify-between bg-white p-5 dark:bg-black 2xl:p-10"
+      class="flex basis-1/4 flex-col justify-between rounded-r-3xl border-r-2 border-[--md-sys-color-primary] p-5 dark:bg-black 2xl:p-10"
     >
       <!-- City name & date -->
       <div class="flex items-center justify-between">
@@ -28,9 +28,6 @@ whenever(shiftS, () => openModal("settings"));
           </h1>
           <p class="text-sm 2xl:text-2xl">{{ weatherInformation.for }}</p>
         </div>
-        <!-- <button type="button" @click="openModal('search')">
-          
-        </button> -->
         <md-filled-tonal-icon-button @click="openModal('search')">
           <LazyPhosphorIconMagnifyingGlass />
         </md-filled-tonal-icon-button>
@@ -55,17 +52,8 @@ whenever(shiftS, () => openModal("settings"));
 
     <!-- 2nd section -->
     <section
-      class="flex w-3/4 flex-auto flex-col justify-around bg-[--md-sys-color-primary-container] px-24 pt-10"
+      class="flex w-3/4 flex-auto flex-col justify-around rounded-l-3xl bg-[--md-sys-color-primary-container] px-24 pt-10"
     >
-      <!-- <button type="button" class="ml-auto" @click="openModal('settings')">
-      </button> -->
-
-      <!-- <md-filled-tonal-icon-button
-        @click="openModal('settings')"
-        class="ml-auto"
-      >
-        <LazyPhosphorIconGear />
-      </md-filled-tonal-icon-button> -->
       <!-- Forecast section -->
       <div class="space-y-3">
         <h1 class="text-xl 2xl:text-3xl">Forecast</h1>
@@ -73,13 +61,12 @@ whenever(shiftS, () => openModal("settings"));
         <Swiper
           :slides-per-view="2"
           :grab-cursor="true"
-          :centered-slides="true"
           :space-between="30"
           class="select-none"
         >
           <!-- Forecast -->
           <SwiperSlide
-            class="flex flex-col justify-around rounded-2xl bg-white/50 p-5 backdrop-blur-lg 2xl:space-y-36 2xl:p-10"
+            class="flex flex-col justify-around rounded-2xl bg-[--md-sys-color-on-primary] p-5 2xl:space-y-36 2xl:p-10"
             v-for="(forecast, index) of weatherInformation.forecast"
             :key="index"
           >
@@ -117,77 +104,65 @@ whenever(shiftS, () => openModal("settings"));
       <div class="space-y-3">
         <h1 class="text-xl 2xl:text-3xl">Atmosphere</h1>
 
-        <Swiper
-          :slides-per-view="2"
-          :grab-cursor="true"
-          :centered-slides="true"
-          :space-between="30"
-          class="select-none"
-        >
-          <!-- Clouds -->
-          <SwiperSlide
-            class="flex flex-col justify-around rounded-2xl bg-white/50 p-5 backdrop-blur-lg 2xl:space-y-36 2xl:p-10"
+        <ul class="flex gap-x-3">
+          <li
+            class="flex w-fit flex-col rounded-md bg-[--md-sys-color-on-primary] p-3 2xl:w-1/2 2xl:p-10"
           >
             <h2 class="flex items-center gap-x-2 2xl:text-2xl">
               Clouds
-              <LazyPhosphorIconCloud class="text-2xl 2xl:text-3xl" />
+              <LazyPhosphorIconCloud size="22" />
             </h2>
 
             <p class="float-right font-serif text-lg 2xl:text-4xl">
               {{ weatherInformation.cloudiness }}
             </p>
-          </SwiperSlide>
-
-          <!-- Humidity (if any) -->
-          <SwiperSlide
-            class="flex flex-col justify-around rounded-2xl bg-white/50 p-5 backdrop-blur-lg 2xl:space-y-36 2xl:p-10"
-            v-if="weatherInformation.humidity"
+          </li>
+          <li
+            class="flex w-fit flex-col rounded-md bg-[--md-sys-color-on-primary] p-3 2xl:w-1/2 2xl:p-10"
           >
             <h2 class="flex items-center gap-x-1 2xl:text-2xl">
               Humidity
-              <LazyPhosphorIconDropHalfBottom class="text-2xl 2xl:text-3xl" />
+              <LazyPhosphorIconDropHalfBottom size="22" />
             </h2>
 
             <p class="float-right font-serif text-lg 2xl:text-4xl">
               {{ weatherInformation.humidity }}
             </p>
-          </SwiperSlide>
-
-          <!-- Pressure (if any) -->
-          <SwiperSlide
-            class="flex flex-col justify-around rounded-2xl bg-white/50 p-5 backdrop-blur-lg 2xl:space-y-36 2xl:p-10"
-            v-if="weatherInformation.pressure"
+          </li>
+          <li
+            class="flex w-fit flex-col rounded-md bg-[--md-sys-color-on-primary] p-3 2xl:w-1/2 2xl:p-10"
           >
-            <h2>Pressure</h2>
+            <h2 class="flex items-center gap-x-1 2xl:text-2xl">
+              Pressure
+              <LazyPhosphorIconGauge size="22" />
+            </h2>
 
             <p class="float-right font-serif text-lg 2xl:text-4xl">
               <span class="font-serif">{{ weatherInformation.pressure }}</span>
               hPa
             </p>
-          </SwiperSlide>
-
-          <!-- Visibility -->
-          <SwiperSlide
-            class="flex flex-col justify-around rounded-2xl bg-white/50 p-5 backdrop-blur-lg 2xl:space-y-36 2xl:p-10"
+          </li>
+          <li
+            class="flex w-fit flex-col rounded-md bg-[--md-sys-color-on-primary] p-3 2xl:w-1/2 2xl:p-10"
           >
             <h2 class="flex items-center gap-x-2 2xl:text-2xl">
               Visibility
-              <LazyPhosphorIconEye class="text-2xl 2xl:text-3xl" />
+              <LazyPhosphorIconEye size="22" />
             </h2>
 
             <p class="float-right font-serif text-lg 2xl:text-4xl">
               {{ weatherInformation.visibility }} km
             </p>
-          </SwiperSlide>
-        </Swiper>
+          </li>
+        </ul>
       </div>
 
       <!-- Feels like, wind, sunrise & sunset section -->
       <div class="flex items-center gap-x-3">
         <!-- Feels like & wind -->
-        <ul class="flex basis-1/2 flex-col items-center space-y-3">
+        <ul class="basis-1/2 space-y-3">
           <li
-            class="flex w-full items-center justify-between rounded-md bg-white/40 p-3 2xl:w-1/2 2xl:p-10"
+            class="flex w-full items-center justify-between rounded-md bg-[--md-sys-color-on-primary] p-3 2xl:w-1/2 2xl:p-10"
           >
             <h1 class="2xl:text-xl">Feels like:</h1>
             <p class="font-serif 2xl:text-2xl">
@@ -195,26 +170,15 @@ whenever(shiftS, () => openModal("settings"));
             </p>
           </li>
           <li
-            class="w-full space-y-2 rounded-md bg-white/40 p-3 2xl:w-3/4 2xl:p-10"
+            class="w-full space-y-2 rounded-md bg-[--md-sys-color-on-primary] p-3 2xl:w-3/4 2xl:p-10"
           >
             <h1 class="2xl:text-2xl">Wind</h1>
             <ul class="space-y-1">
               <li class="flex items-center justify-between">
                 <h1 class="text-sm 2xl:text-xl">Direction:</h1>
-                <Tippy>
-                  <LazySvgoCompass
-                    class="w-7 2xl:w-10"
-                    :style="`transform: rotate(${
-                      weatherInformation.wind.degree + 90
-                    }deg);`"
-                  />
-
-                  <template #content>
-                    <span class="font-serif">{{
-                      `${weatherInformation.wind.degree}°`
-                    }}</span>
-                  </template>
-                </Tippy>
+                <p class="font-serif">
+                  {{ weatherInformation.wind.degree }}&deg;
+                </p>
               </li>
               <li class="flex items-center justify-between">
                 <h1 class="text-sm 2xl:text-xl">Gust:</h1>
@@ -234,9 +198,9 @@ whenever(shiftS, () => openModal("settings"));
         </ul>
 
         <!-- Sunrise & sunset -->
-        <ul class="flex basis-1/2 flex-col items-center space-y-3">
+        <ul class="basis-1/2 space-y-3">
           <li
-            class="flex w-full items-center justify-between rounded-md bg-white/40 p-3 2xl:w-1/2 2xl:p-10"
+            class="flex w-full items-center justify-between rounded-md bg-[--md-sys-color-on-primary] p-3 2xl:w-1/2 2xl:p-10"
           >
             <h1 class="2xl:text-xl">Sunrise:</h1>
             <p class="font-serif 2xl:text-2xl">
@@ -244,7 +208,7 @@ whenever(shiftS, () => openModal("settings"));
             </p>
           </li>
           <li
-            class="flex w-full items-center justify-between rounded-md bg-white/40 p-3 2xl:w-1/2 2xl:p-10"
+            class="flex w-full items-center justify-between rounded-md bg-[--md-sys-color-on-primary] p-3 2xl:w-1/2 2xl:p-10"
           >
             <h1 class="2xl:text-xl">Sunset:</h1>
             <p class="font-serif 2xl:text-2xl">

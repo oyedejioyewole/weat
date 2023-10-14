@@ -1,15 +1,12 @@
 import { useStorage } from "@vueuse/core";
 
 export const useStore = () =>
-  useState<{
-    loadingStates: { main: boolean; search: boolean };
-    modal: { type: Options["modalTypes"]; opened: boolean };
-  }>("state", () => ({
+  useState("state", () => ({
     loadingStates: {
       main: true,
       search: false,
     },
-    modal: { type: "search", opened: false },
+    modal: { type: "search" as Options["modalTypes"], opened: false },
   }));
 
 export const useSettings = () =>

@@ -4,7 +4,7 @@
 
 ![Preview](preview.png)
 
-Hey 👋🏾, this folder is meant for the website &mdash; <https://weat-ten.vercel.app>
+Hey 👋🏾, this folder is meant for the website &mdash; <https://weat-eight.vercel.app>
 
 **Related projects:**
 
@@ -29,12 +29,10 @@ You need to rename the `.env.example` to `.env`
 
 After which, you should fill in the variables you find in it
 
-**Note:** Run all commands should be run from the root directory
-
 ### Install
 
 ```bash
-$ pnpm --filter site install
+$ pnpm --filter web install
 ```
 
 ### Running
@@ -44,7 +42,7 @@ $ pnpm --filter site install
 Run the following command, to start project in development mode
 
 ```bash
-$ pnpm --filter site dev
+$ pnpm --filter web dev
 ```
 
 #### Production
@@ -52,7 +50,7 @@ $ pnpm --filter site dev
 Run the following command, to build this project
 
 ```bash
-$ pnpm --filter site build
+$ pnpm --filter web build
 ```
 
 ##### Preview (Optional)
@@ -60,5 +58,5 @@ $ pnpm --filter site build
 Run the following command, to test the built project
 
 ```bash
-$ pnpm --filter site preview
+$ pnpm --filter web preview
 ```

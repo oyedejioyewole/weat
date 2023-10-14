@@ -24,3 +24,6 @@ logs
 # Neutralinojs files
 **/bin/
 **/.tmp/
+
+# Miscellaneous
+web/dummy.json

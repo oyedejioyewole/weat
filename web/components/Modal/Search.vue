@@ -37,7 +37,7 @@ const { data: searchResults } = useNuxtData<Responses["search"]>("search");
       id="search-form"
       @submit.prevent="searchForCity(location)"
     >
-      <LazyPhosphorIconMagnifyingGlass class="text-2xl 2xl:text-5xl" />
+      <LazyPhosphorIconMagnifyingGlass size="30" />
       <input
         type="text"
         v-model="location"
@@ -69,18 +69,12 @@ const { data: searchResults } = useNuxtData<Responses["search"]>("search");
           <p slot="supporting-text" class="text-sm 2xl:text-lg">
             {{ location.country }}
           </p>
-          <LazyPhosphorIconCaretRight
-            class="text-2xl 2xl:text-3xl"
-            slot="end"
-          />
+          <LazyPhosphorIconCaretRight size="22" slot="end" />
         </md-list-item>
       </md-list>
 
       <div v-else class="space-y-2">
-        <LazyPhosphorIconMapTrifold
-          class="mx-auto text-4xl 2xl:text-8xl"
-          weight="thin"
-        />
+        <LazyPhosphorIconMapTrifold size="70" class="mx-auto block" />
         <h1 class="text-md text-center 2xl:text-2xl">
           Oops, couldn't find city/location
         </h1>

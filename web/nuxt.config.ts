@@ -29,6 +29,7 @@ export default defineNuxtConfig({
   },
   modules: [
     "@formkit/auto-animate/nuxt",
+    "@kevinmarrec/nuxt-pwa",
     "@nuxt/image",
     "@nuxtjs/google-fonts",
     "@nuxtjs/html-validator",
@@ -45,6 +46,16 @@ export default defineNuxtConfig({
       "/api/**": {
         cors: true,
       },
+    },
+  },
+  pwa: {
+    manifest: {
+      description: "A simple weather app!",
+      display: "minimal-ui",
+      display_override: ["standalone"],
+      name: "Weat",
+      short_name: "Weat",
+      theme_color: "#5c87e4",
     },
   },
   runtimeConfig: {
