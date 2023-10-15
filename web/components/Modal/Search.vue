@@ -33,16 +33,16 @@ const { data: searchResults } = useNuxtData<Responses["search"]>("search");
   <div class="mx-auto space-y-10" v-auto-animate>
     <!-- Search form -->
     <form
+      @submit.prevent="searchForCity(location)"
       class="flex items-center"
       id="search-form"
-      @submit.prevent="searchForCity(location)"
     >
       <LazyPhosphorIconMagnifyingGlass size="30" />
       <input
-        type="text"
-        v-model="location"
         class="w-full bg-inherit px-5 outline-none 2xl:p-10 2xl:text-2xl"
         placeholder="e.g. Washington"
+        type="text"
+        v-model="location"
       />
     </form>
 
@@ -55,15 +55,15 @@ const { data: searchResults } = useNuxtData<Responses["search"]>("search");
     <div v-else-if="searchResults">
       <md-list v-if="searchResults.length > 0" class="rounded-md p-0">
         <md-list-item
-          :key="index"
-          class="transition hover:bg-brand/10"
-          type="button"
-          v-for="(location, index) of searchResults"
-          @click="findWeather(location.latitude, location.longitude)"
           :class="{
             'rounded-t-md': index === 0,
             'rounded-b-md': index === searchResults.length - 1,
           }"
+          :key="index"
+          @click="findWeather(location.latitude, location.longitude)"
+          class="transition hover:bg-brand/10"
+          type="button"
+          v-for="(location, index) of searchResults"
         >
           <h1 slot="headline" class="2xl:text-2xl">{{ location.name }}</h1>
           <p slot="supporting-text" class="text-sm 2xl:text-lg">
@@ -74,7 +74,7 @@ const { data: searchResults } = useNuxtData<Responses["search"]>("search");
       </md-list>
 
       <div v-else class="space-y-2">
-        <LazyPhosphorIconMapTrifold size="70" class="mx-auto block" />
+        <LazyPhosphorIconMapTrifold class="mx-auto block" size="70" />
         <h1 class="text-md text-center 2xl:text-2xl">
           Oops, couldn't find city/location
         </h1>
