@@ -149,7 +149,7 @@ declare global {
         | "clear"
         | "clouds";
     };
-    modalTypes: "search" | "settings";
+    modalTypes: "search" | "settings" | "stats";
     units: "imperial" | "metric" | "standard";
   }
 

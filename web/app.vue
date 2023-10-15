@@ -1,13 +1,15 @@
 <script lang="ts" setup>
-import "@material/web/dialog/dialog";
 import "@material/web/button/filled-button";
 import "@material/web/button/filled-tonal-button";
+import "@material/web/button/text-button";
+import "@material/web/dialog/dialog";
+import "@material/web/fab/fab";
 import "@material/web/iconbutton/filled-tonal-icon-button";
+import "@material/web/iconbutton/icon-button";
 import "@material/web/list/list";
 import "@material/web/list/list-item";
 import "@material/web/progress/circular-progress";
 import "@material/web/switch/switch";
-import "@material/web/button/text-button";
 
 const state = useStore();
 const { data: forecastResponse } =
@@ -82,7 +84,7 @@ watchEffect(() => {
         <p class="text-lg">Loading, hang tight ...</p>
       </div>
 
-      <LazyResult v-else class="flex flex-col md:flex-row" />
+      <LazyResultBase v-else class="flex flex-col md:flex-row" />
       <LazyModalBase />
     </div>
     <Toast position="bottom-center" rich-colors />

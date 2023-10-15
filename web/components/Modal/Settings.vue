@@ -30,7 +30,9 @@ watch(
         ></md-switch>
       </li>
 
-      <li class="flex items-center justify-between">
+      <li
+        class="flex flex-col justify-between gap-y-2 sm:flex-row sm:items-center"
+      >
         <label>Unit system</label>
         <div>
           <md-text-button trailing-icon @click="settings.unit = 'imperial'"
