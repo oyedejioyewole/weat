@@ -1,14 +1,14 @@
 <script setup lang="ts">
-const settings = useSettings();
 const { $toast } = useNuxtApp();
+const settings = useSettings();
 
 watch(
   settings,
-  (_new, _old) => {
+  () =>
     $toast.message("Tip", {
       description: "After changing some settings, a reload is required",
-    });
-  },
+    }),
+
   { deep: true },
 );
 </script>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-const state = useStore();
 const settings = useSettings();
-
+const state = useStore();
 const location = ref("");
+
+const { data: searchResults } = useNuxtData<Responses["search"]>("search");
 
 const findWeather = async (latitude: number, longitude: number) => {
   state.value.loadingStates.main = true;
@@ -25,8 +26,6 @@ const searchForCity = async (location: string) => {
   await useSearch(location);
   state.value.loadingStates.search = false;
 };
-
-const { data: searchResults } = useNuxtData<Responses["search"]>("search");
 </script>
 
 <template>

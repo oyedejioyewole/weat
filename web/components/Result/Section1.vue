@@ -1,10 +1,8 @@
 <script lang="ts" setup>
-const emit = defineEmits<{
-  (event: "open-modal", type: Options["modalTypes"]): void;
-}>();
-
 const { data: weatherInformation } =
   useNuxtData<Responses["forecast"]>("forecast");
+
+const state = useStore();
 </script>
 
 <template>
@@ -22,7 +20,9 @@ const { data: weatherInformation } =
           {{ weatherInformation.for }}
         </p>
       </div>
-      <md-filled-tonal-icon-button @click="emit('open-modal', 'search')">
+      <md-filled-tonal-icon-button
+        @click="state.modal = { opened: true, type: 'search' }"
+      >
         <LazyPhosphorIconMagnifyingGlass />
       </md-filled-tonal-icon-button>
     </div>

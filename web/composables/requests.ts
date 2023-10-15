@@ -19,6 +19,7 @@ export const useGetForecast = async (
   unit: Options["units"],
 ) => {
   const { $toast } = useNuxtApp();
+  const { isDesktopOrTablet } = useDevice();
 
   if (typeof query === "object")
     await useFetch("/api/forecast", {
@@ -51,9 +52,10 @@ export const useGetForecast = async (
       retry: 1,
     });
 
-  $toast.message("Tip", {
-    description: "You can use Shift + S to open the settings",
-  });
+  if (isDesktopOrTablet)
+    $toast.message("Tip", {
+      description: "You can use Shift + S to open the settings",
+    });
 };
 
 export const useSearch = (location: string) =>

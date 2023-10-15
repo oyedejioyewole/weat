@@ -9,7 +9,9 @@ const state = useStore();
   <section v-if="weatherInformation">
     <!-- Forecast section -->
     <div class="space-y-5 px-5">
-      <h1 class="inline-flex items-center gap-x-1 text-xl 2xl:text-3xl">
+      <h1
+        class="inline-flex items-center gap-x-1 text-xl md:hidden 2xl:text-3xl"
+      >
         <md-icon-button
           @click="state.modal = { opened: false, type: 'search' }"
         >
@@ -18,7 +20,18 @@ const state = useStore();
         Overview
       </h1>
 
-      <h2 class="text-xl 2xl:text-3xl">Forecast</h2>
+      <h2
+        class="inline-flex w-full items-center justify-between text-xl 2xl:text-3xl"
+      >
+        Forecast
+
+        <md-icon-button
+          @click="state.modal = { opened: true, type: 'settings' }"
+          class="hidden md:flex lg:hidden"
+        >
+          <LazyPhosphorIconGear />
+        </md-icon-button>
+      </h2>
 
       <Swiper
         :grab-cursor="true"

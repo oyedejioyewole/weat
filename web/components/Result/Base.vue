@@ -8,26 +8,26 @@ const isOverviewOpen = computed(() =>
   state.value.modal.type === "stats" ? true : false,
 );
 
-whenever(shiftS, () => openModal("settings"));
-
-const openModal = (type: Options["modalTypes"]) =>
-  (state.value.modal = { type, opened: true });
+whenever(
+  shiftS,
+  () => (state.value.modal = { opened: true, type: "settings" }),
+);
 </script>
 
 <template>
   <div>
     <!-- 1st section -->
-    <ResultSection1 @open-modal="openModal" />
+    <ResultSection1 />
 
     <!-- Floating action buttons -->
     <div class="absolute bottom-7 right-7 grid gap-4 md:hidden">
       <!-- Settings -->
-      <md-fab lowered @click="openModal('settings')">
+      <md-fab lowered @click="state.modal = { opened: true, type: 'settings' }">
         <LazyPhosphorIconGearSix slot="icon" />
       </md-fab>
 
       <!-- Overview -->
-      <md-fab lowered @click="openModal('stats')">
+      <md-fab lowered @click="state.modal = { opened: true, type: 'stats' }">
         <LazyPhosphorIconCloud slot="icon" />
       </md-fab>
     </div>
