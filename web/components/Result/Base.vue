@@ -39,6 +39,7 @@ whenever(shiftS, () => useModal("settings"));
       contents-color="#d9e2ff"
       v-model="isOverviewOpen"
       :fullscreen="true"
+      :persistent="true"
       :no-tip="true"
     >
       <ResultSection2 class="space-y-10 py-10" />
