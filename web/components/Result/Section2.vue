@@ -12,9 +12,7 @@ const state = useStore();
       <h1
         class="inline-flex items-center gap-x-1 text-xl md:hidden 2xl:text-3xl"
       >
-        <md-icon-button
-          @click="state.modal = { opened: false, type: 'search' }"
-        >
+        <md-icon-button @click="useModal('search', { opened: false })">
           <LazyPhosphorIconCaretLeft />
         </md-icon-button>
         Overview
@@ -26,7 +24,7 @@ const state = useStore();
         Forecast
 
         <md-icon-button
-          @click="state.modal = { opened: true, type: 'settings' }"
+          @click="useModal('settings')"
           class="hidden md:flex lg:hidden"
         >
           <LazyPhosphorIconGear />

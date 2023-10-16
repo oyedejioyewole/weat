@@ -149,17 +149,13 @@ declare global {
         | "clear"
         | "clouds";
     };
-    modalTypes: "search" | "settings" | "stats";
+    modalTypes: "search" | "settings" | "overview";
     units: "imperial" | "metric" | "standard";
   }
 
   interface Responses {
     forecast: InternalApi["/api/forecast"]["post"];
-    currentIp: {
-      ip: string;
-      success: boolean;
-      type: string;
-    };
+    currentIp: string;
     search: InternalApi["/api/search"]["get"];
   }
 }

@@ -5,13 +5,10 @@ const keys = useMagicKeys();
 const shiftS = keys["Shift+S"];
 
 const isOverviewOpen = computed(() =>
-  state.value.modal.type === "stats" ? true : false,
+  state.value.modal.type === "overview" ? true : false,
 );
 
-whenever(
-  shiftS,
-  () => (state.value.modal = { opened: true, type: "settings" }),
-);
+whenever(shiftS, () => useModal("settings"));
 </script>
 
 <template>
@@ -22,12 +19,12 @@ whenever(
     <!-- Floating action buttons -->
     <div class="absolute bottom-7 right-7 grid gap-4 md:hidden">
       <!-- Settings -->
-      <md-fab lowered @click="state.modal = { opened: true, type: 'settings' }">
+      <md-fab lowered @click="useModal('settings')">
         <LazyPhosphorIconGearSix slot="icon" />
       </md-fab>
 
       <!-- Overview -->
-      <md-fab lowered @click="state.modal = { opened: true, type: 'stats' }">
+      <md-fab lowered @click="useModal('overview')">
         <LazyPhosphorIconCloud slot="icon" />
       </md-fab>
     </div>

@@ -1,16 +1,18 @@
 <script setup lang="ts">
 const settings = useSettings();
 const state = useStore();
+
 const location = ref("");
 
 const { data: searchResults } = useNuxtData<Responses["search"]>("search");
 
 const findWeather = async (latitude: number, longitude: number) => {
-  state.value.loadingStates.main = true;
-  state.value.modal.opened = false;
+  useModal("search", { opened: false });
+  clearNuxtData("search");
 
   location.value = "";
-  searchResults.value = null;
+  state.value.loading.main = true;
+  clearNuxtData("forecast");
 
   await useGetForecast({ latitude, longitude }, settings.value.unit);
 
@@ -18,13 +20,13 @@ const findWeather = async (latitude: number, longitude: number) => {
     useNuxtData<Responses["forecast"]>("forecast");
   if (!forecastResponse.value) return;
 
-  state.value.loadingStates.main = false;
+  state.value.loading.main = false;
 };
 
 const searchForCity = async (location: string) => {
-  state.value.loadingStates.search = true;
+  state.value.loading.search = true;
   await useSearch(location);
-  state.value.loadingStates.search = false;
+  state.value.loading.search = false;
 };
 </script>
 
@@ -46,7 +48,7 @@ const searchForCity = async (location: string) => {
     </form>
 
     <!-- Loading (if any) -->
-    <div class="text-center" v-if="state.loadingStates.search">
+    <div class="text-center" v-if="state.loading.search">
       <md-circular-progress indeterminate />
     </div>
 
@@ -81,14 +83,3 @@ const searchForCity = async (location: string) => {
     </div>
   </div>
 </template>
-
-<style>
-@keyframes spin {
-  to {
-    transform: rotate(-360deg);
-  }
-}
-.spin {
-  animation: spin 1s linear infinite;
-}
-</style>

@@ -20,9 +20,7 @@ const state = useStore();
           {{ weatherInformation.for }}
         </p>
       </div>
-      <md-filled-tonal-icon-button
-        @click="state.modal = { opened: true, type: 'search' }"
-      >
+      <md-filled-tonal-icon-button @click="useModal('search')">
         <LazyPhosphorIconMagnifyingGlass />
       </md-filled-tonal-icon-button>
     </div>
