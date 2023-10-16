@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+const state = useStore();
+
 const { data: weatherInformation } =
   useNuxtData<Responses["forecast"]>("forecast");
-
-const state = useStore();
 </script>
 
 <template>
@@ -12,7 +12,7 @@ const state = useStore();
       <h1
         class="inline-flex items-center gap-x-1 text-xl md:hidden 2xl:text-3xl"
       >
-        <md-icon-button @click="useModal('search', { opened: false })">
+        <md-icon-button @click="state.currentView = 'home'">
           <LazyPhosphorIconCaretLeft />
         </md-icon-button>
         Overview

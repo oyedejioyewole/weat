@@ -139,6 +139,8 @@ declare global {
   }
 
   interface Options {
+    currentView: "home" | "statistics";
+    modalTypes: "search" | "settings" | "none";
     openweathermap: {
       weatherConditions:
         | "thunderstorm"
@@ -149,7 +151,6 @@ declare global {
         | "clear"
         | "clouds";
     };
-    modalTypes: "search" | "settings" | "overview";
     units: "imperial" | "metric" | "standard";
   }
 

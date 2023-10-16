@@ -11,10 +11,11 @@ import "@material/web/list/list-item";
 import "@material/web/progress/circular-progress";
 import "@material/web/switch/switch";
 
+const { $toast } = useNuxtApp();
 const state = useStore();
+
 const { data: forecastResponse } =
   useNuxtData<Responses["forecast"]>("forecast");
-const { $toast } = useNuxtApp();
 
 onMounted(async () => {
   useSetTheme();
@@ -76,17 +77,27 @@ watchEffect(() => {
         v-if="state.loading.main"
         class="flex h-screen flex-col items-center justify-center gap-y-4 will-change-contents"
       >
-        <SvgoLogo
-          class="mx-auto w-24 animate-bounce drop-shadow-lg"
+        <SvgoIconRaw
+          class="mx-auto w-20 animate-bounce drop-shadow-lg md:w-24"
           role="img"
-          aria-label="App logo"
+          aria-label="App icon"
         />
-        <p class="text-lg">Loading, hang tight ...</p>
+        <p class="md:text-lg">Loading, hang tight ...</p>
       </div>
 
-      <LazyResultBase v-else class="flex flex-col md:flex-row" />
-      <LazyModalBase />
+      <LazyResultBase
+        v-else-if="!state.loading.main && state.currentView === 'home'"
+        class="flex flex-col md:flex-row"
+      />
+
+      <LazyResultStatistics
+        v-else-if="!state.loading.main && state.currentView === 'statistics'"
+        class="flex flex-col justify-between gap-y-10 bg-[--md-sys-color-primary-container] py-10 md:w-3/4 md:justify-around md:py-0"
+      />
     </div>
+    <LazyModalBase />
+
+    <!-- Toast -->
     <Toast position="bottom-center" rich-colors />
   </ClientOnly>
 </template>

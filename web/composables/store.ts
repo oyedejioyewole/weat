@@ -2,6 +2,7 @@ import { useStorage } from "@vueuse/core";
 
 export const useStore = () =>
   useState("state", () => ({
+    currentView: "home" as Options["currentView"],
     loading: {
       main: true,
       search: false,

@@ -1,15 +1,10 @@
 <script lang="ts" setup>
 const { data: weatherInformation } =
   useNuxtData<Responses["forecast"]>("forecast");
-
-const state = useStore();
 </script>
 
 <template>
-  <section
-    class="flex min-h-screen flex-col justify-between p-5 dark:bg-black md:h-screen md:w-1/4 2xl:p-10"
-    v-if="weatherInformation"
-  >
+  <section v-if="weatherInformation">
     <!-- City name, date -->
     <div class="flex items-center justify-between">
       <div class="space-y-1">
