@@ -1,18 +1,21 @@
 <script lang="ts" setup>
-import "@material/web/dialog/dialog";
 import "@material/web/button/filled-button";
 import "@material/web/button/filled-tonal-button";
+import "@material/web/button/text-button";
+import "@material/web/dialog/dialog";
+import "@material/web/fab/fab";
 import "@material/web/iconbutton/filled-tonal-icon-button";
+import "@material/web/iconbutton/icon-button";
 import "@material/web/list/list";
 import "@material/web/list/list-item";
 import "@material/web/progress/circular-progress";
 import "@material/web/switch/switch";
-import "@material/web/button/text-button";
 
+const { $toast } = useNuxtApp();
 const state = useStore();
+
 const { data: forecastResponse } =
   useNuxtData<Responses["forecast"]>("forecast");
-const { $toast } = useNuxtApp();
 
 onMounted(async () => {
   useSetTheme();
@@ -54,13 +57,13 @@ onMounted(async () => {
   const { data: currentIp } = useNuxtData<Responses["currentIp"]>("ip");
 
   if (currentIp.value)
-    await useGetForecast(currentIp.value.ip, settings.value.unit);
+    await useGetForecast(currentIp.value, settings.value.unit);
 
-  if (forecastResponse.value) state.value.loadingStates.main = false;
+  if (forecastResponse.value) state.value.loading.main = false;
 });
 
 watchEffect(() => {
-  if (state.value.loadingStates.main) useHead({ title: "Loading ..." });
+  if (state.value.loading.main) useHead({ title: "Loading ..." });
   else if (forecastResponse.value)
     useHead({ title: `${forecastResponse.value.metadata.name} - Readings` });
   else useHead({ title: "" });
@@ -71,20 +74,30 @@ watchEffect(() => {
   <ClientOnly>
     <div v-auto-animate>
       <div
-        v-if="state.loadingStates.main"
+        v-if="state.loading.main"
         class="flex h-screen flex-col items-center justify-center gap-y-4 will-change-contents"
       >
-        <SvgoLogo
-          class="mx-auto w-24 animate-bounce drop-shadow-lg"
+        <SvgoIconRaw
+          class="mx-auto w-20 animate-bounce drop-shadow-lg md:w-24"
           role="img"
-          aria-label="App logo"
+          aria-label="App icon"
         />
-        <p class="text-lg">Loading, hang tight ...</p>
+        <p class="md:text-lg">Loading, hang tight ...</p>
       </div>
 
-      <LazyResult v-else class="flex flex-col md:flex-row" />
-      <LazyModalBase />
+      <LazyResultBase
+        v-else-if="!state.loading.main && state.currentView === 'home'"
+        class="flex flex-col md:flex-row"
+      />
+
+      <LazyResultStatistics
+        v-else-if="!state.loading.main && state.currentView === 'statistics'"
+        class="flex flex-col justify-between gap-y-10 bg-[--md-sys-color-primary-container] py-10 md:w-3/4 md:justify-around md:py-0"
+      />
     </div>
+    <LazyModalBase />
+
+    <!-- Toast -->
     <Toast position="bottom-center" rich-colors />
   </ClientOnly>
 </template>

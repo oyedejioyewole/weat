@@ -31,6 +31,7 @@ export default defineNuxtConfig({
     "@formkit/auto-animate/nuxt",
     "@kevinmarrec/nuxt-pwa",
     "@nuxt/image",
+    "@nuxtjs/device",
     "@nuxtjs/google-fonts",
     "@nuxtjs/html-validator",
     "@nuxtjs/tailwindcss",

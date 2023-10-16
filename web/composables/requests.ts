@@ -1,6 +1,5 @@
 export const useGetIp = async () => {
-  await useFetch<Responses["currentIp"]>("/ip.json", {
-    baseURL: "https://api4.my-ip.io",
+  await useFetch<Responses["currentIp"]>("https://api.ipify.org", {
     key: "ip",
     onRequestError: () => {
       const { $toast } = useNuxtApp();
@@ -10,7 +9,6 @@ export const useGetIp = async () => {
       });
     },
     retry: 1,
-    pick: ["ip"],
   });
 };
 
@@ -19,6 +17,8 @@ export const useGetForecast = async (
   unit: Options["units"],
 ) => {
   const { $toast } = useNuxtApp();
+  const { isDesktopOrTablet } = useDevice();
+  const state = useStore();
 
   if (typeof query === "object")
     await useFetch("/api/forecast", {
@@ -51,9 +51,12 @@ export const useGetForecast = async (
       retry: 1,
     });
 
-  $toast.message("Tip", {
-    description: "You can use Shift + S to open the settings",
-  });
+  if (isDesktopOrTablet && !state.value.tipShown) {
+    $toast.message("Tip", {
+      description: "You can use Shift + S to open the settings",
+    });
+    state.value.tipShown = true;
+  }
 };
 
 export const useSearch = (location: string) =>

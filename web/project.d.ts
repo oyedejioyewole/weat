@@ -139,6 +139,8 @@ declare global {
   }
 
   interface Options {
+    currentView: "home" | "statistics";
+    modalTypes: "search" | "settings" | "none";
     openweathermap: {
       weatherConditions:
         | "thunderstorm"
@@ -149,17 +151,12 @@ declare global {
         | "clear"
         | "clouds";
     };
-    modalTypes: "search" | "settings";
     units: "imperial" | "metric" | "standard";
   }
 
   interface Responses {
     forecast: InternalApi["/api/forecast"]["post"];
-    currentIp: {
-      ip: string;
-      success: boolean;
-      type: string;
-    };
+    currentIp: string;
     search: InternalApi["/api/search"]["get"];
   }
 }
