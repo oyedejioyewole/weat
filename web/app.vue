@@ -99,7 +99,7 @@ watchEffect(() => {
         v-else-if="
           state.hasForecastLoaded && state.currentView === 'statistics'
         "
-        class="flex h-screen flex-col justify-between gap-y-10 bg-[--md-sys-color-primary-container] py-10 md:w-3/4 md:justify-around md:py-0"
+        class="flex min-h-screen flex-col justify-between gap-y-10 bg-[--md-sys-color-primary-container] py-10 md:w-3/4 md:justify-around md:py-0"
       />
     </div>
     <LazyModalBase />
