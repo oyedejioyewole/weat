@@ -13,7 +13,7 @@ const whenClosed = () => {
   <md-dialog
     :open="state.modal.opened && state.modal.type !== 'none'"
     @closed="whenClosed"
-    class="w-3/4 overflow-hidden rounded-md px-8 py-5 lg:w-1/2 2xl:w-1/4 2xl:px-20 2xl:py-10"
+    class="w-3/4 rounded-md lg:w-1/2 2xl:w-1/4"
   >
     <h1
       class="font-serif"
@@ -23,8 +23,8 @@ const whenClosed = () => {
       Settings
     </h1>
     <div slot="content">
-      <LazyModalSearch v-if="state.modal.type === 'search'" />
-      <LazyModalSettings v-else-if="state.modal.type === 'settings'" />
+      <ModalSearch v-if="state.modal.type === 'search'" />
+      <ModalSettings v-else-if="state.modal.type === 'settings'" />
     </div>
     <div slot="actions">
       <md-filled-button

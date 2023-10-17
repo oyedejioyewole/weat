@@ -3,26 +3,29 @@ const state = useStore();
 
 const { data: weatherInformation } =
   useNuxtData<Responses["forecast"]>("forecast");
+
+const { width } = useWindowSize();
 </script>
 
 <template>
   <section v-if="weatherInformation">
-    <!-- Forecast section -->
+    <!-- Forecast group -->
     <div class="space-y-5 px-5">
-      <h1
-        class="inline-flex items-center gap-x-1 text-xl md:hidden 2xl:text-3xl"
-      >
+      <!-- Overview (only on phones and tablets) -->
+      <h1 class="inline-flex items-center gap-x-1 text-xl md:hidden">
         <md-icon-button @click="state.currentView = 'home'">
           <LazyPhosphorIconCaretLeft />
         </md-icon-button>
         Overview
       </h1>
 
+      <!-- Heading -->
       <h2
         class="inline-flex w-full items-center justify-between text-xl 2xl:text-3xl"
       >
         Forecast
 
+        <!-- Settings (shows only when using tablets) -->
         <md-icon-button
           @click="useModal('settings')"
           class="hidden md:flex lg:hidden"
@@ -31,19 +34,26 @@ const { data: weatherInformation } =
         </md-icon-button>
       </h2>
 
+      <!-- Forecasts (swipeable) -->
       <Swiper
-        :grab-cursor="true"
-        :slides-per-view="2"
-        :space-between="20"
         class="select-none"
+        :grab-cursor="true"
+        :slides-per-view="width >= 1536 ? 4 : 2"
+        :space-between="20"
+        :modules="[SwiperScrollbar]"
+        :scrollbar="{
+          enabled: true,
+          draggable: true,
+          hide: width <= 768,
+          snapOnRelease: true,
+        }"
       >
-        <!-- Forecast -->
         <SwiperSlide
-          class="flex flex-col rounded-2xl bg-[--md-sys-color-on-primary] p-5 md:mx-0 2xl:space-y-36 2xl:p-10"
+          class="space-y-4 rounded-2xl bg-[--md-sys-color-on-primary] p-5 2xl:p-10"
           v-for="(forecast, index) of weatherInformation.forecast"
           :key="index"
         >
-          <!-- Time -->
+          <!-- Forecasted for -->
           <h2
             v-if="typeof forecast.for === 'string'"
             class="font-serif text-sm 2xl:text-2xl"
@@ -55,18 +65,22 @@ const { data: weatherInformation } =
             <span class="font-serif">{{ forecast.for.time }}</span>
           </h2>
 
-          <div class="flex flex-col items-center sm:flex-row md:float-right">
-            <!-- Weather icon -->
-            <LazyNuxtImg
+          <!-- Weather group -->
+          <div
+            class="flex flex-col items-center sm:flex-row md:float-right 2xl:gap-x-4"
+          >
+            <!-- Icon -->
+            <NuxtImg
+              format="webp"
+              height="56"
+              sizes="2xl:144px 56px"
+              width="56"
               :alt="forecast.weather.description"
               :src="`https://openweathermap.org/img/wn/${forecast.weather.iconId}@4x.png`"
-              height="56"
-              sizes="xxl:144px 56px"
-              width="56"
             />
 
-            <!-- Temperature -->
-            <p class="font-serif 2xl:text-5xl">
+            <!-- Readings -->
+            <p class="font-serif 2xl:text-4xl">
               {{ forecast.temperature }}
             </p>
           </div>
@@ -74,78 +88,94 @@ const { data: weatherInformation } =
       </Swiper>
     </div>
 
-    <!-- Atmosphere section -->
+    <!-- Atmosphere group -->
     <div class="space-y-3 px-5">
+      <!-- Heading -->
       <h1 class="text-xl 2xl:text-3xl">Atmosphere</h1>
 
-      <!-- Clouds, humidity, pressure, visibility -->
+      <!-- Clouds, humidity (+2 more) group -->
       <ul class="grid grid-cols-2 gap-3 md:flex">
+        <!-- Clouds -->
         <li
-          class="flex flex-col justify-between rounded-xl bg-[--md-sys-color-on-primary] p-3 md:w-fit 2xl:w-1/2 2xl:p-10"
+          class="flex flex-col justify-between rounded-xl bg-[--md-sys-color-on-primary] p-3 md:w-fit 2xl:justify-around 2xl:gap-y-4 2xl:p-6"
         >
-          <h2 class="flex items-center gap-x-1 text-sm 2xl:text-2xl">
+          <h2
+            class="flex items-center gap-x-1 text-sm 2xl:gap-x-2 2xl:text-2xl"
+          >
             Clouds
-            <LazyPhosphorIconCloud size="22" />
+            <LazyPhosphorIconCloud :size="width >= 1536 ? 30 : 22" />
           </h2>
 
-          <p class="float-right font-serif 2xl:text-4xl">
+          <p class="float-right font-serif 2xl:text-3xl">
             {{ weatherInformation.cloudiness }}
           </p>
         </li>
+
+        <!-- Humidity -->
         <li
-          class="flex flex-col justify-between rounded-xl bg-[--md-sys-color-on-primary] p-3 md:w-fit 2xl:p-10"
+          class="flex flex-col justify-between rounded-xl bg-[--md-sys-color-on-primary] p-3 md:w-fit 2xl:justify-around 2xl:gap-y-4 2xl:p-6"
         >
-          <h2 class="flex items-center gap-x-1 text-sm 2xl:text-2xl">
+          <h2
+            class="flex items-center gap-x-1 text-sm 2xl:gap-x-2 2xl:text-2xl"
+          >
             Humidity
-            <LazyPhosphorIconDropHalfBottom size="22" />
+            <LazyPhosphorIconDropHalfBottom :size="width >= 1536 ? 30 : 22" />
           </h2>
 
-          <p class="float-right font-serif 2xl:text-4xl">
+          <p class="float-right font-serif 2xl:text-3xl">
             {{ weatherInformation.humidity }}
           </p>
         </li>
+
+        <!-- Pressure -->
         <li
-          class="flex flex-col justify-between rounded-xl bg-[--md-sys-color-on-primary] p-3 md:w-fit 2xl:w-1/2 2xl:p-10"
+          class="flex flex-col justify-between rounded-xl bg-[--md-sys-color-on-primary] p-3 md:w-fit 2xl:justify-around 2xl:gap-y-4 2xl:p-6"
         >
-          <h2 class="flex items-center gap-x-1 text-sm 2xl:text-2xl">
+          <h2
+            class="flex items-center gap-x-1 text-sm 2xl:gap-x-2 2xl:text-2xl"
+          >
             Pressure
-            <LazyPhosphorIconGauge size="22" />
+            <LazyPhosphorIconGauge :size="width >= 1536 ? 30 : 22" />
           </h2>
 
-          <p class="font-serif 2xl:text-4xl">
+          <p class="font-serif 2xl:text-3xl">
             {{ weatherInformation.pressure }}
             hPa
           </p>
         </li>
+
+        <!-- Visibility -->
         <li
-          class="flex flex-col justify-between rounded-xl bg-[--md-sys-color-on-primary] p-3 md:w-fit 2xl:w-1/2 2xl:p-10"
+          class="flex flex-col justify-between rounded-xl bg-[--md-sys-color-on-primary] p-3 md:w-fit 2xl:justify-around 2xl:gap-y-4 2xl:p-6"
         >
-          <h2 class="flex items-center gap-x-1 text-sm 2xl:text-2xl">
+          <h2
+            class="flex items-center gap-x-1 text-sm 2xl:gap-x-2 2xl:text-2xl"
+          >
             Visibility
-            <LazyPhosphorIconEye size="22" />
+            <LazyPhosphorIconEye :size="width >= 1536 ? 30 : 22" />
           </h2>
 
-          <p class="float-right font-serif 2xl:text-4xl">
+          <p class="float-right font-serif 2xl:text-3xl">
             {{ weatherInformation.visibility }} km
           </p>
         </li>
       </ul>
     </div>
 
-    <!-- Feels like, wind, sunrise, sunset -->
-    <div class="flex items-center gap-x-3 px-5">
+    <!-- Feels like, wind (+2 more) group -->
+    <div class="flex items-center gap-x-3 px-5 2xl:gap-x-0">
       <!-- Feels like & wind -->
-      <ul class="basis-1/2 space-y-3">
+      <ul class="basis-1/2 space-y-3 2xl:w-1/4 2xl:basis-auto">
         <li
-          class="flex w-full flex-col justify-between gap-y-3 rounded-xl bg-[--md-sys-color-on-primary] p-3 md:flex-row lg:items-center 2xl:w-1/2 2xl:p-10"
+          class="flex w-full flex-col justify-between gap-y-3 rounded-xl bg-[--md-sys-color-on-primary] p-3 md:flex-row lg:items-center 2xl:w-3/4 2xl:p-10"
         >
-          <h1 class="2xl:text-xl">Feels like:</h1>
-          <p class="font-serif 2xl:text-2xl">
+          <h1 class="2xl:text-2xl">Feels like:</h1>
+          <p class="font-serif 2xl:text-3xl">
             {{ weatherInformation.temperature.feelsLike }}
           </p>
         </li>
         <li
-          class="w-full space-y-3 rounded-xl bg-[--md-sys-color-on-primary] p-3 2xl:w-3/4 2xl:p-10"
+          class="w-full space-y-3 rounded-xl bg-[--md-sys-color-on-primary] p-3 2xl:w-3/4 2xl:space-y-5 2xl:p-10"
         >
           <h1 class="2xl:text-2xl">Wind</h1>
           <ul class="space-y-3">
@@ -153,7 +183,7 @@ const { data: weatherInformation } =
               class="flex flex-col justify-between gap-y-1 md:flex-row md:items-center"
             >
               <h1 class="text-sm 2xl:text-xl">Direction:</h1>
-              <p class="font-serif">
+              <p class="font-serif 2xl:text-3xl">
                 {{ weatherInformation.wind.degree }}&deg;
               </p>
             </li>
@@ -161,7 +191,7 @@ const { data: weatherInformation } =
               class="flex flex-col justify-between gap-y-1 md:flex-row md:items-center"
             >
               <h1 class="text-sm 2xl:text-xl">Gust:</h1>
-              <p class="font-serif 2xl:text-2xl">
+              <p class="font-serif 2xl:text-3xl">
                 {{ weatherInformation.wind.gust }}
               </p>
             </li>
@@ -169,7 +199,7 @@ const { data: weatherInformation } =
               class="flex flex-col justify-between gap-y-1 md:flex-row md:items-center"
             >
               <h1 class="text-sm 2xl:text-xl">Speed:</h1>
-              <p class="font-serif 2xl:text-2xl">
+              <p class="font-serif 2xl:text-3xl">
                 {{ weatherInformation.wind.speed }}
               </p>
             </li>
@@ -179,20 +209,20 @@ const { data: weatherInformation } =
       </ul>
 
       <!-- Sunrise & sunset -->
-      <ul class="basis-1/2 space-y-3">
+      <ul class="basis-1/2 space-y-3 2xl:w-1/4 2xl:basis-auto">
         <li
-          class="flex w-full flex-col justify-between gap-y-3 rounded-xl bg-[--md-sys-color-on-primary] p-3 md:flex-row lg:items-center 2xl:w-1/2 2xl:p-10"
+          class="flex w-full flex-col justify-between gap-y-3 rounded-xl bg-[--md-sys-color-on-primary] p-3 md:flex-row lg:items-center 2xl:p-10"
         >
-          <h1 class="2xl:text-xl">Sunrise:</h1>
-          <p class="font-serif 2xl:text-2xl">
+          <h1 class="2xl:text-2xl">Sunrise:</h1>
+          <p class="font-serif 2xl:text-3xl">
             {{ weatherInformation.sunrise }}
           </p>
         </li>
         <li
-          class="flex w-full flex-col justify-between gap-y-3 rounded-xl bg-[--md-sys-color-on-primary] p-3 md:flex-row md:items-center 2xl:w-1/2 2xl:p-10"
+          class="flex w-full flex-col justify-between gap-y-3 rounded-xl bg-[--md-sys-color-on-primary] p-3 md:flex-row md:items-center 2xl:p-10"
         >
-          <h1 class="2xl:text-xl">Sunset:</h1>
-          <p class="font-serif 2xl:text-2xl">
+          <h1 class="2xl:text-2xl">Sunset:</h1>
+          <p class="font-serif 2xl:text-3xl">
             {{ weatherInformation.sunset }}
           </p>
         </li>

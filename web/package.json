@@ -19,15 +19,14 @@
     "@vueuse/nuxt": "^10.5.0",
     "nuxt": "^3.7.4",
     "nuxt-phosphor-icons": "^1.0.7",
-    "nuxt-security": "^0.14.4",
-    "nuxt-svgo": "^3.5.5"
+    "nuxt-svgo": "^3.5.5",
+    "nuxt-swiper": "^1.2.2"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.0",
     "@material/material-color-utilities": "^0.2.7",
     "@material/web": "^1.0.0",
     "date-fns": "^2.30.0",
-    "swiper": "^10.3.1",
     "vue-sonner": "^0.4.4",
     "zod": "^3.22.4"
   },

@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 const { data: weatherInformation } =
   useNuxtData<Responses["forecast"]>("forecast");
+
+const hasWeatherIconLoaded = ref(false);
 </script>
 
 <template>
@@ -15,19 +17,27 @@ const { data: weatherInformation } =
           {{ weatherInformation.for }}
         </p>
       </div>
-      <md-filled-tonal-icon-button @click="useModal('search')">
-        <LazyPhosphorIconMagnifyingGlass />
+      <md-filled-tonal-icon-button
+        @click="$device.isDesktop ? useModal('search') : useModal('settings')"
+        id="action-button"
+      >
+        <LazyPhosphorIconMagnifyingGlass class="hidden md:block" />
+        <LazyPhosphorIconGear class="block md:hidden" />
       </md-filled-tonal-icon-button>
     </div>
 
     <!-- Weather icon -->
-    <LazyNuxtImg
-      :alt="weatherInformation.weather.description"
-      :src="`https://openweathermap.org/img/wn/${weatherInformation.weather.iconId}@4x.png`"
-      class="mx-auto"
+    <NuxtImg
+      class="mx-auto transition"
       height="208"
       sizes="208px 2xl:500px"
       width="208"
+      :alt="weatherInformation.weather.description"
+      :class="{
+        'animate-pulse rounded-2xl bg-gray-300': !hasWeatherIconLoaded,
+      }"
+      :src="`https://openweathermap.org/img/wn/${weatherInformation.weather.iconId}@4x.png`"
+      @load="hasWeatherIconLoaded = true"
     />
 
     <!-- Temperature & weather description -->
@@ -41,3 +51,26 @@ const { data: weatherInformation } =
     </div>
   </section>
 </template>
+
+<style scoped>
+@media screen and (max-width: 767px) {
+  #action-button {
+    --md-filled-tonal-icon-button-container-width: 50px;
+    --md-filled-tonal-icon-button-container-height: 50px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  #action-button {
+    --md-filled-tonal-icon-button-icon-size: 20px;
+  }
+}
+
+@media screen and (min-width: 1536px) {
+  #action-button {
+    --md-filled-tonal-icon-button-container-width: 75px;
+    --md-filled-tonal-icon-button-container-height: 75px;
+    --md-filled-tonal-icon-button-icon-size: 30px;
+  }
+}
+</style>
