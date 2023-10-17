@@ -27,7 +27,6 @@
     "@material/material-color-utilities": "^0.2.7",
     "@material/web": "^1.0.0",
     "date-fns": "^2.30.0",
-    "swiper": "^10.3.1",
     "vue-sonner": "^0.4.4",
     "zod": "^3.22.4"
   },

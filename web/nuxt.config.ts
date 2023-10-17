@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     },
   },
   build: { transpile: ["vue-sonner"] },
-  css: ["swiper/css", "tippy.js/dist/tippy.css"],
+  css: ["tippy.js/dist/tippy.css"],
   devtools: { enabled: true },
   image: {
     domains: ["openweathermap.org"],
@@ -72,6 +72,9 @@ export default defineNuxtConfig({
   },
   svgo: {
     defaultImport: "component",
+  },
+  swiper: {
+    modules: ["scrollbar"],
   },
   typescript: {
     shim: false,
