@@ -17,6 +17,11 @@ const state = useStore();
 const { data: forecastResponse } =
   useNuxtData<Responses["forecast"]>("forecast");
 
+const keys = useMagicKeys();
+const shiftS = keys["Shift+S"];
+
+whenever(shiftS, () => useModal("settings"));
+
 onMounted(async () => {
   useSetTheme();
 
@@ -59,11 +64,11 @@ onMounted(async () => {
   if (currentIp.value)
     await useGetForecast(currentIp.value, settings.value.unit);
 
-  if (forecastResponse.value) state.value.loading.main = false;
+  if (forecastResponse.value) state.value.hasForecastLoaded = true;
 });
 
 watchEffect(() => {
-  if (state.value.loading.main) useHead({ title: "Loading ..." });
+  if (!state.value.hasForecastLoaded) useHead({ title: "Loading ..." });
   else if (forecastResponse.value)
     useHead({ title: `${forecastResponse.value.metadata.name} - Readings` });
   else useHead({ title: "" });
@@ -74,7 +79,7 @@ watchEffect(() => {
   <ClientOnly>
     <div v-auto-animate>
       <div
-        v-if="state.loading.main"
+        v-if="!state.hasForecastLoaded"
         class="flex h-screen flex-col items-center justify-center gap-y-4 will-change-contents"
       >
         <SvgoIconRaw
@@ -86,13 +91,15 @@ watchEffect(() => {
       </div>
 
       <LazyResultBase
-        v-else-if="!state.loading.main && state.currentView === 'home'"
+        v-else-if="state.hasForecastLoaded && state.currentView === 'home'"
         class="flex flex-col md:flex-row"
       />
 
       <LazyResultStatistics
-        v-else-if="!state.loading.main && state.currentView === 'statistics'"
-        class="flex flex-col justify-between gap-y-10 bg-[--md-sys-color-primary-container] py-10 md:w-3/4 md:justify-around md:py-0"
+        v-else-if="
+          state.hasForecastLoaded && state.currentView === 'statistics'
+        "
+        class="flex h-screen flex-col justify-between gap-y-10 bg-[--md-sys-color-primary-container] py-10 md:w-3/4 md:justify-around md:py-0"
       />
     </div>
     <LazyModalBase />

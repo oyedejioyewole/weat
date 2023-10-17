@@ -2,6 +2,7 @@ import type { Config } from "tailwindcss";
 
 export default {
   content: [],
+  plugins: [],
   theme: {
     extend: {
       colors: {
@@ -13,6 +14,4 @@ export default {
       },
     },
   },
-  darkMode: "class",
-  plugins: [],
 } satisfies Config;

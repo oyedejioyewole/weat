@@ -38,6 +38,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "nuxt-phosphor-icons",
     "nuxt-svgo",
+    "nuxt-swiper",
   ],
   nitro: {
     prerender: {

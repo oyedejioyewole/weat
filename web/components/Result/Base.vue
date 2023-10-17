@@ -14,8 +14,8 @@ const state = useStore();
 
     <div class="absolute bottom-7 right-7 grid gap-4 md:hidden">
       <!-- Settings -->
-      <md-fab lowered @click="useModal('settings')">
-        <LazyPhosphorIconGearSix slot="icon" />
+      <md-fab lowered @click="useModal('search')">
+        <LazyPhosphorIconMagnifyingGlass slot="icon" />
       </md-fab>
 
       <!-- Overview -->
