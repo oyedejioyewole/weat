@@ -24,7 +24,7 @@ const whenClosed = () => {
     </h1>
     <div slot="content">
       <ModalSearch v-if="state.modal.type === 'search'" />
-      <ModalSettings v-else-if="state.modal.type === 'settings'" />
+      <ModalSettingsBase v-else-if="state.modal.type === 'settings'" />
     </div>
     <div slot="actions">
       <md-filled-button
