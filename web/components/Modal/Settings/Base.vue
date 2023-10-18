@@ -90,7 +90,9 @@ watch(
                 : `${millisecondsToHours(previousInterval)} hours`
             }}
             {{
-              millisecondsToMinutes(previousInterval) % 60 > 0
+              millisecondsToMinutes(previousInterval) % 60 === 1
+                ? `a ${millisecondsToMinutes(previousInterval)} minute`
+                : millisecondsToMinutes(previousInterval) % 60 > 1
                 ? `${millisecondsToMinutes(previousInterval)} minutes`
                 : ""
             }}

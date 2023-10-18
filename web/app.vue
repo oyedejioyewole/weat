@@ -75,7 +75,9 @@ onMounted(async () => {
 
   if (settings.value.features.autoRefresh.enabled)
     useIntervalFn(async () => {
-      await whenMounted();
+      state.value.hasForecastLoaded = false;
+      await refreshNuxtData("forecast");
+      state.value.hasForecastLoaded = true;
     }, settings.value.features.autoRefresh.interval);
 });
 

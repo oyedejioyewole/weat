@@ -44,7 +44,7 @@ const { width } = useWindowSize();
         :scrollbar="{
           enabled: true,
           draggable: true,
-          hide: width <= 768,
+          hide: true,
           snapOnRelease: true,
         }"
       >

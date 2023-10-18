@@ -3,6 +3,8 @@ const { data: weatherInformation } =
   useNuxtData<Responses["forecast"]>("forecast");
 
 const hasWeatherIconLoaded = ref(false);
+
+const { width } = useWindowSize();
 </script>
 
 <template>
@@ -18,7 +20,7 @@ const hasWeatherIconLoaded = ref(false);
         </p>
       </div>
       <md-filled-tonal-icon-button
-        @click="$device.isDesktop ? useModal('search') : useModal('settings')"
+        @click="width >= 768 ? useModal('search') : useModal('settings')"
         id="action-button"
       >
         <LazyPhosphorIconMagnifyingGlass class="hidden md:block" />
