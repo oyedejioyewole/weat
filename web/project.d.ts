@@ -140,6 +140,7 @@ declare global {
 
   interface Options {
     currentView: "home" | "statistics";
+    intervals: "hours" | "minutes";
     modalTypes: "search" | "settings" | "none";
     openweathermap: {
       weatherConditions:

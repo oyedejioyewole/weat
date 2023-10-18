@@ -25,8 +25,9 @@ const findWeather = async (latitude: number, longitude: number) => {
 };
 
 const searchForCity = async (location: string) => {
-  await useSearch(location);
   loadingSearchResults.value = true;
+  await useSearch(location);
+  loadingSearchResults.value = false;
 };
 </script>
 

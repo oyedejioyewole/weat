@@ -10,6 +10,7 @@ import "@material/web/list/list";
 import "@material/web/list/list-item";
 import "@material/web/progress/circular-progress";
 import "@material/web/switch/switch";
+import "@material/web/textfield/outlined-text-field";
 
 const { $toast } = useNuxtApp();
 const state = useStore();
@@ -19,14 +20,14 @@ const { data: forecastResponse } =
 
 const keys = useMagicKeys();
 const shiftS = keys["Shift+S"];
+const settings = useSettings();
 
 whenever(shiftS, () => useModal("settings"));
 
-onMounted(async () => {
-  useSetTheme();
-
-  const settings = useSettings();
-  if (settings.value.features.geolocation) {
+const whenMounted = async () => {
+  if (settings.value.homeCity)
+    await useGetForecast(settings.value.homeCity, settings.value.unit);
+  else if (settings.value.features.geolocation) {
     const { isSupported, coords, error } = useGeolocation({
       enableHighAccuracy: true,
     });
@@ -65,6 +66,19 @@ onMounted(async () => {
     await useGetForecast(currentIp.value, settings.value.unit);
 
   if (forecastResponse.value) state.value.hasForecastLoaded = true;
+};
+
+onMounted(async () => {
+  useSetTheme();
+
+  await whenMounted();
+
+  if (settings.value.features.autoRefresh.enabled)
+    useIntervalFn(async () => {
+      state.value.hasForecastLoaded = false;
+      await refreshNuxtData("forecast");
+      state.value.hasForecastLoaded = true;
+    }, settings.value.features.autoRefresh.interval);
 });
 
 watchEffect(() => {
