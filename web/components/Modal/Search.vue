@@ -1,43 +1,40 @@
 <script setup lang="ts">
 const settings = useSettings();
-const state = useStore();
 
 const location = ref("");
 const loadingSearchResults = ref(false);
 
 const { data: searchResults } = useNuxtData<Responses["search"]>("search");
 
-const findWeather = async (latitude: number, longitude: number) => {
+const findWeather = async (
+  payload: { latitude: number; longitude: number },
+  unit: Options["units"],
+) => {
   useModal("search", { opened: false });
   clearNuxtData("search");
 
   location.value = "";
-  state.value.hasForecastLoaded = false;
   clearNuxtData("forecast");
 
-  await useGetForecast({ latitude, longitude }, settings.value.unit);
-
-  const { data: forecastResponse } =
-    useNuxtData<Responses["forecast"]>("forecast");
-  if (!forecastResponse.value) return;
-
-  state.value.hasForecastLoaded = true;
+  await useGetForecast(settings.value.numberOfForecasts, payload, unit);
 };
 
-const searchForCity = async (location: string) => {
+const searchForCity = async (payload: { limit: number; location: string }) => {
   loadingSearchResults.value = true;
-  await useSearch(location);
+  await useSearch(payload);
   loadingSearchResults.value = false;
 };
 </script>
 
 <template>
-  <div class="mx-auto space-y-10" v-auto-animate>
+  <div>
     <!-- Search form -->
     <form
       class="flex items-center"
       id="search-form"
-      @submit.prevent="searchForCity(location)"
+      @submit.prevent="
+        searchForCity({ limit: settings.numberOfCities, location })
+      "
     >
       <PhosphorIconMagnifyingGlass size="30" />
       <input
@@ -55,7 +52,7 @@ const searchForCity = async (location: string) => {
 
     <div v-else-if="searchResults">
       <!-- Search results (not empty) -->
-      <md-list v-if="searchResults.length > 0" class="rounded-md p-0">
+      <md-list class="rounded-md p-0" v-if="searchResults.length > 0">
         <md-list-item
           class="transition hover:bg-brand/10"
           type="button"
@@ -65,7 +62,12 @@ const searchForCity = async (location: string) => {
             'rounded-b-md': index === searchResults.length - 1,
           }"
           :key="index"
-          @click="findWeather(location.latitude, location.longitude)"
+          @click="
+            findWeather(
+              { latitude: location.latitude, longitude: location.longitude },
+              settings.unit,
+            )
+          "
         >
           <h1 slot="headline" class="2xl:text-lg">{{ location.name }}</h1>
           <p slot="supporting-text" class="2xl:text-md text-sm">
@@ -76,7 +78,7 @@ const searchForCity = async (location: string) => {
       </md-list>
 
       <!-- Search results (empty) -->
-      <div v-else class="space-y-2">
+      <div class="space-y-2" v-else>
         <LazyPhosphorIconMapTrifold class="mx-auto block" size="70" />
         <h1 class="text-md text-center 2xl:text-2xl">
           Oops, couldn't find city/location

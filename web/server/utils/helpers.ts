@@ -1,11 +1,11 @@
+import { format, fromUnixTime, isSameDay } from 'date-fns'
+
+
 export const processResponse = async (
   apiResponse: OpenWeatherMapResponses["forecast"],
   unit: Options["units"],
 ) => {
-  const [weatherInformation, dateFns] = await Promise.all([
-    __weather(apiResponse.city.coord.lat, apiResponse.city.coord.lon, unit),
-    import("date-fns"),
-  ]);
+  const weatherInformation = await __weather(apiResponse.city.coord.lat, apiResponse.city.coord.lon, unit)
 
   const country = new Intl.DisplayNames(["en"], { type: "region" }).of(
     apiResponse.city.country,
@@ -13,12 +13,12 @@ export const processResponse = async (
 
   return {
     cloudiness: __appendUnit("percentage", weatherInformation.clouds.all),
-    for: dateFns.format(
-      dateFns.fromUnixTime(weatherInformation.dt),
+    for: format(
+      fromUnixTime(weatherInformation.dt),
       "EEEE, d MMMM",
     ),
     forecast: apiResponse.list.map(({ main, weather, dt }) => {
-      const forecastDate = dateFns.fromUnixTime(dt);
+      const forecastDate = fromUnixTime(dt);
       return {
         temperature: __appendUnit("temperature", main.temp.toFixed(1), unit),
         weather: {
@@ -27,12 +27,12 @@ export const processResponse = async (
             word.toUpperCase(),
           ),
         },
-        for: dateFns.isSameDay(forecastDate, new Date())
-          ? dateFns.format(forecastDate, "p")
+        for: isSameDay(forecastDate, new Date())
+          ? format(forecastDate, "p")
           : {
-              day: dateFns.format(forecastDate, "EEEE"),
-              time: dateFns.format(forecastDate, "p"),
-            },
+            day: format(forecastDate, "EEEE"),
+            time: format(forecastDate, "p"),
+          },
       };
     }),
     humidity: __appendUnit("percentage", weatherInformation.main.humidity),
@@ -41,12 +41,12 @@ export const processResponse = async (
       name: apiResponse.city.name,
     },
     pressure: weatherInformation.main.grnd_level,
-    sunrise: dateFns.format(
-      dateFns.fromUnixTime(weatherInformation.sys.sunrise),
+    sunrise: format(
+      fromUnixTime(weatherInformation.sys.sunrise),
       "p",
     ),
-    sunset: dateFns.format(
-      dateFns.fromUnixTime(weatherInformation.sys.sunset),
+    sunset: format(
+      fromUnixTime(weatherInformation.sys.sunset),
       "p",
     ),
     temperature: {

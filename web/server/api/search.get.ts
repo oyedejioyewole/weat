@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
   const schema = z
     .object({
       location: z.string(),
+      limit: z.coerce.number().min(1).max(3)
     })
     .strict();
 
@@ -19,7 +20,7 @@ export default defineEventHandler(async (event) => {
     });
 
   const { openweathermap } = useRuntimeConfig();
-  const { location } = response.data;
+  const { location, limit } = response.data;
 
   const locations = await $fetch<OpenWeatherMapResponses["geocoding"]>(
     `/geo/1.0/direct`,
@@ -27,8 +28,8 @@ export default defineEventHandler(async (event) => {
       baseURL: openweathermap.base,
       query: {
         appid: openweathermap.key,
+        limit,
         q: location,
-        limit: 2,
       },
     },
   );

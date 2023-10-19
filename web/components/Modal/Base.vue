@@ -11,10 +11,11 @@ const whenClosed = () => {
 
 <template>
   <md-dialog
+    class="w-3/4 rounded-md lg:w-1/2 2xl:w-1/4"
     :open="state.modal.opened && state.modal.type !== 'none'"
     @closed="whenClosed"
-    class="w-3/4 rounded-md lg:w-1/2 2xl:w-1/4"
   >
+    <!-- Title -->
     <h1
       class="font-serif"
       slot="headline"
@@ -22,10 +23,18 @@ const whenClosed = () => {
     >
       Settings
     </h1>
+
+    <!-- Content -->
     <div slot="content">
-      <ModalSearch v-if="state.modal.type === 'search'" />
-      <ModalSettingsBase v-else-if="state.modal.type === 'settings'" />
+      <ModalSearch
+        class="mx-auto space-y-10"
+        v-auto-animate
+        v-if="state.modal.type === 'search'"
+      />
+      <ModalSettingsBase v-else />
     </div>
+
+    <!-- Action button -->
     <div slot="actions">
       <md-filled-button
         form="search-form"

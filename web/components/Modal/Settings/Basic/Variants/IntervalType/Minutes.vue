@@ -3,7 +3,9 @@
     label="Minutes"
     type="number"
     @input="
-      useChangeAutoRefreshInterval({ minutes: parseInt($event.target.value) })
+      useChangeAutoRefreshInterval({
+        minutes: parseInt($event.target.value) || 0,
+      })
     "
   />
 </template>

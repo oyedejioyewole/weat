@@ -13,16 +13,19 @@ export const useGetIp = async () => {
 };
 
 export const useGetForecast = async (
+  count: number,
   query: string | { latitude: number; longitude: number },
   unit: Options["units"],
 ) => {
-  const { $toast } = useNuxtApp();
   const { isDesktopOrTablet } = useDevice();
   const state = useStore();
+
+  const { $toast } = useNuxtApp();
 
   if (typeof query === "object")
     await useFetch("/api/forecast", {
       body: {
+        count,
         latitude: query.latitude,
         longitude: query.longitude,
         unit,
@@ -45,6 +48,7 @@ export const useGetForecast = async (
         });
       },
       query: {
+        count,
         ip: query,
         unit,
       },
@@ -59,7 +63,7 @@ export const useGetForecast = async (
   }
 };
 
-export const useSearch = (location: string) =>
+export const useSearch = (payload: { limit: number, location: string }) =>
   useFetch("/api/search", {
     key: "search",
     onRequestError: () => {
@@ -69,6 +73,6 @@ export const useSearch = (location: string) =>
         description: "Try checking your internet connection",
       });
     },
-    query: { location },
+    query: { limit: payload.limit, location: payload.location },
     retry: 1,
   });
