@@ -1,4 +1,4 @@
-<img src="./assets/icons/logo.svg" width=64 align="right" />
+<img src="./assets/icons/icon.raw.svg" width=64 align="right" />
 
 # Weat
 
