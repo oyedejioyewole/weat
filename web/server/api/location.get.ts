@@ -5,6 +5,7 @@ export default defineEventHandler(async (event) => {
 
   const schema = z
     .object({
+      count: z.coerce.number().min(1).max(8),
       ip: z.string().ip(),
       unit: z.enum(["metric", "imperial", "standard"]),
     })
@@ -16,7 +17,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ message: "Oops, validation failed", statusCode: 400 });
 
   const { ipinfo } = useRuntimeConfig();
-  const { ip, unit } = response.data;
+  const { ip, unit, count } = response.data;
 
   const ipResponse = await $fetch<IpInfoResponse>(`/${ip}`, {
     baseURL: ipinfo.base,
@@ -29,6 +30,7 @@ export default defineEventHandler(async (event) => {
 
   return $fetch("/api/forecast", {
     body: {
+      count,
       latitude: parseFloat(latitude),
       longitude: parseFloat(longitude),
       unit,

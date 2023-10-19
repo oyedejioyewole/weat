@@ -4,6 +4,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const schema = z
     .object({
+      count: z.number().min(1).max(8),
       latitude: z.number(),
       longitude: z.number(),
       unit: z.enum(["metric", "imperial", "standard"]),
@@ -20,7 +21,7 @@ export default defineEventHandler(async (event) => {
     });
 
   const { openweathermap } = useRuntimeConfig();
-  const { latitude, longitude, unit } = response.data;
+  const { latitude, longitude, unit, count } = response.data;
 
   const forecast = await $fetch<OpenWeatherMapResponses["forecast"]>(
     `/data/2.5/forecast`,
@@ -31,7 +32,7 @@ export default defineEventHandler(async (event) => {
         lat: latitude,
         lon: longitude,
         units: unit,
-        cnt: 8,
+        cnt: count,
       },
     },
   );

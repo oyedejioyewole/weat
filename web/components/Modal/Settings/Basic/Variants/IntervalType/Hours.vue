@@ -14,16 +14,14 @@ watch(input, (_new) => useChangeAutoRefreshInterval(_new), { deep: true });
       max="23"
       type="number"
       :value="input.hours"
-      @input="input.hours = parseInt(($event.target as HTMLInputElement).value)"
+      @input="input.hours = parseInt($event.target.value) || 0"
     />
     <md-outlined-text-field
       label="Minute(s)"
       max="59"
       type="number"
       :value="input.minutes"
-      @input="
-        input.minutes = parseInt(($event.target as HTMLInputElement).value)
-      "
+      @input="input.minutes = parseInt($event.target.value) || 0"
     />
   </div>
 </template>

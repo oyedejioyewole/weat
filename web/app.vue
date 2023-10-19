@@ -12,8 +12,8 @@ import "@material/web/progress/circular-progress";
 import "@material/web/switch/switch";
 import "@material/web/textfield/outlined-text-field";
 
-const { $toast } = useNuxtApp();
 const state = useStore();
+const { $toast } = useNuxtApp();
 
 const { data: forecastResponse } =
   useNuxtData<Responses["forecast"]>("forecast");
@@ -26,7 +26,11 @@ whenever(shiftS, () => useModal("settings"));
 
 const whenMounted = async () => {
   if (settings.value.homeCity)
-    await useGetForecast(settings.value.homeCity, settings.value.unit);
+    await useGetForecast(
+      settings.value.numberOfForecasts,
+      settings.value.homeCity,
+      settings.value.unit,
+    );
   else if (settings.value.features.geolocation) {
     const { isSupported, coords, error } = useGeolocation({
       enableHighAccuracy: true,
@@ -50,6 +54,7 @@ const whenMounted = async () => {
           await useGetIp();
         else
           await useGetForecast(
+            settings.value.numberOfForecasts,
             {
               latitude: coords.value.latitude,
               longitude: coords.value.longitude,
@@ -63,9 +68,11 @@ const whenMounted = async () => {
   const { data: currentIp } = useNuxtData<Responses["currentIp"]>("ip");
 
   if (currentIp.value)
-    await useGetForecast(currentIp.value, settings.value.unit);
-
-  if (forecastResponse.value) state.value.hasForecastLoaded = true;
+    await useGetForecast(
+      settings.value.numberOfForecasts,
+      currentIp.value,
+      settings.value.unit,
+    );
 };
 
 onMounted(async () => {
@@ -82,10 +89,8 @@ onMounted(async () => {
 });
 
 watchEffect(() => {
-  if (!state.value.hasForecastLoaded) useHead({ title: "Loading ..." });
-  else if (forecastResponse.value)
-    useHead({ title: `${forecastResponse.value.metadata.name} - Readings` });
-  else useHead({ title: "" });
+  if (!forecastResponse.value) useHead({ title: "Loading ..." });
+  else useHead({ title: `${forecastResponse.value.metadata.name} - Readings` });
 });
 </script>
 
@@ -93,7 +98,7 @@ watchEffect(() => {
   <ClientOnly>
     <div v-auto-animate>
       <div
-        v-if="!state.hasForecastLoaded"
+        v-if="!forecastResponse"
         class="flex h-screen flex-col items-center justify-center gap-y-4 will-change-contents"
       >
         <SvgoIconRaw
@@ -105,18 +110,16 @@ watchEffect(() => {
       </div>
 
       <LazyResultBase
-        v-else-if="state.hasForecastLoaded && state.currentView === 'home'"
+        v-else-if="forecastResponse && state.currentView === 'home'"
         class="flex flex-col md:flex-row"
       />
 
       <LazyResultStatistics
-        v-else-if="
-          state.hasForecastLoaded && state.currentView === 'statistics'
-        "
+        v-else-if="forecastResponse && state.currentView === 'statistics'"
         class="flex min-h-screen flex-col justify-between gap-y-10 bg-[--md-sys-color-primary-container] py-10 md:w-3/4 md:justify-around md:py-0"
       />
     </div>
-    <LazyModalBase />
+    <ModalBase />
 
     <!-- Toast -->
     <Toast position="bottom-center" rich-colors />
