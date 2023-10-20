@@ -1,0 +1,7 @@
+{
+  "name": "weat",
+  "private": true,
+  "workspaces": [
+    "web"
+  ]
+}

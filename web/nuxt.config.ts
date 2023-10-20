@@ -15,7 +15,6 @@ export default defineNuxtConfig({
     },
   },
   build: { transpile: ["vue-sonner"] },
-  css: ["tippy.js/dist/tippy.css"],
   devtools: { enabled: true },
   image: {
     domains: ["openweathermap.org"],
