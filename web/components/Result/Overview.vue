@@ -2,8 +2,6 @@
 const { data: weatherInformation } =
   useNuxtData<Responses["forecast"]>("forecast");
 
-const hasWeatherIconLoaded = ref(false);
-
 const { width } = useWindowSize();
 </script>
 
@@ -35,11 +33,7 @@ const { width } = useWindowSize();
       sizes="208px 2xl:500px"
       width="208"
       :alt="weatherInformation.weather.description"
-      :class="{
-        'animate-pulse rounded-2xl bg-gray-300': !hasWeatherIconLoaded,
-      }"
       :src="`https://openweathermap.org/img/wn/${weatherInformation.weather.iconId}@4x.png`"
-      @load="hasWeatherIconLoaded = true"
     />
 
     <!-- Temperature & weather description -->

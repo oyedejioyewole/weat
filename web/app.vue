@@ -100,33 +100,33 @@ watchEffect(() => {
 </script>
 
 <template>
-  <ClientOnly>
-    <div v-auto-animate>
-      <div
-        v-if="!forecastResponse"
-        class="flex h-screen flex-col items-center justify-center gap-y-4 will-change-contents"
-      >
-        <SvgoIconRaw
-          class="mx-auto w-20 animate-bounce drop-shadow-lg md:w-24"
-          role="img"
-          aria-label="App icon"
-        />
-        <p class="md:text-lg">Loading, hang tight ...</p>
-      </div>
-
-      <LazyResultBase
-        v-else-if="forecastResponse && state.currentView === 'home'"
-        class="flex flex-col md:flex-row"
+  <div v-auto-animate>
+    <div
+      v-if="!forecastResponse"
+      class="flex h-screen flex-col items-center justify-center gap-y-4 will-change-contents"
+    >
+      <SvgoIconRaw
+        class="mx-auto w-20 animate-bounce drop-shadow-lg md:w-24"
+        role="img"
+        aria-label="App icon"
       />
-
-      <LazyResultStatistics
-        v-else-if="forecastResponse && state.currentView === 'statistics'"
-        class="flex min-h-screen flex-col justify-between gap-y-10 bg-[--md-sys-color-primary-container] py-10 md:w-3/4 md:justify-around md:py-0"
-      />
+      <p class="md:text-lg">Loading, hang tight ...</p>
     </div>
-    <ModalBase />
 
-    <!-- Toast -->
+    <LazyResultBase
+      v-else-if="forecastResponse && state.currentView === 'home'"
+      class="flex flex-col md:flex-row"
+    />
+
+    <LazyResultStatistics
+      v-else-if="forecastResponse && state.currentView === 'statistics'"
+      class="flex min-h-screen flex-col justify-between gap-y-10 bg-[--md-sys-color-primary-container] py-10 md:w-3/4 md:justify-around md:py-0"
+    />
+  </div>
+  <ModalBase />
+
+  <!-- Toast -->
+  <ClientOnly>
     <Toast position="bottom-center" rich-colors />
   </ClientOnly>
 </template>
