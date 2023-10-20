@@ -5,7 +5,7 @@ const state = useStore();
 <template>
   <div>
     <LazyResultOverview
-      class="flex min-h-screen flex-col justify-between p-5 dark:bg-black md:h-screen md:w-1/4 2xl:p-10"
+      class="flex min-h-screen flex-col justify-between p-5 md:h-screen md:w-1/4 2xl:p-10"
     />
 
     <LazyResultStatistics

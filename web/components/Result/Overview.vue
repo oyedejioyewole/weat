@@ -16,7 +16,7 @@ const { width } = useWindowSize();
           {{ weatherInformation.metadata.name }}
         </h1>
         <p class="text-[13px] 2xl:text-2xl">
-          {{ weatherInformation.for }}
+          {{ weatherInformation.metadata.country }}
         </p>
       </div>
       <md-filled-tonal-icon-button
@@ -64,6 +64,8 @@ const { width } = useWindowSize();
 
 @media screen and (min-width: 768px) {
   #action-button {
+    --md-filled-tonal-icon-button-container-width: 60px;
+    --md-filled-tonal-icon-button-container-height: 60px;
     --md-filled-tonal-icon-button-icon-size: 20px;
   }
 }

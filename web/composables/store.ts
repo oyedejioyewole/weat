@@ -3,7 +3,11 @@ import { useStorage } from "@vueuse/core";
 export const useStore = () =>
   useState("state", () => ({
     currentView: "home" as Options["currentView"],
-    modal: { type: "search" as Options["modalTypes"], opened: false },
+    modal: {
+      opened: false,
+      settingsView: "basic" as Options["settingsView"],
+      type: "none" as Options["modalTypes"],
+    },
     tipShown: false,
   }));
 
@@ -13,9 +17,16 @@ export const useSettings = () =>
       autoReloadOnSettingsChange: { enabled: true, timeout: 5000 },
       autoRefresh: { enabled: true, interval: 3.6e6 },
       geolocation: false,
+      homeCity: {
+        enabled: true,
+        city: {
+          latitude: null as null | number,
+          longitude: null as null | number,
+          name: "",
+        },
+      },
     },
-    homeCity: null as null | { longitude: number; latitude: number },
-    numberOfCities: 2,
+    numberOfCities: 3,
     numberOfForecasts: 8,
     unit: "metric" as Options["units"],
   });

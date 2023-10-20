@@ -2,6 +2,8 @@
 import "@material/web/button/filled-button";
 import "@material/web/button/filled-tonal-button";
 import "@material/web/button/text-button";
+import "@material/web/chips/chip-set";
+import "@material/web/chips/suggestion-chip";
 import "@material/web/dialog/dialog";
 import "@material/web/fab/fab";
 import "@material/web/iconbutton/filled-tonal-icon-button";
@@ -25,10 +27,14 @@ const settings = useSettings();
 whenever(shiftS, () => useModal("settings"));
 
 const whenMounted = async () => {
-  if (settings.value.homeCity)
+  if (
+    settings.value.features.homeCity.enabled &&
+    settings.value.features.homeCity.city.latitude &&
+    settings.value.features.homeCity.city.longitude
+  )
     await useGetForecast(
       settings.value.numberOfForecasts,
-      settings.value.homeCity,
+      settings.value.features.homeCity.city,
       settings.value.unit,
     );
   else if (settings.value.features.geolocation) {
@@ -80,12 +86,11 @@ onMounted(async () => {
 
   await whenMounted();
 
-  if (settings.value.features.autoRefresh.enabled)
+  if (settings.value.features.autoRefresh.enabled) {
     useIntervalFn(async () => {
-      state.value.hasForecastLoaded = false;
       await refreshNuxtData("forecast");
-      state.value.hasForecastLoaded = true;
     }, settings.value.features.autoRefresh.interval);
+  }
 });
 
 watchEffect(() => {

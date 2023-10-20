@@ -7,8 +7,9 @@ export const useModal = (
 ) => {
   const state = useStore();
 
-  if (override) state.value.modal = { opened: override.opened, type };
-  else state.value.modal = { opened: true, type };
+  if (override)
+    state.value.modal = { ...state.value.modal, opened: override.opened, type };
+  else state.value.modal = { ...state.value.modal, opened: true, type };
 };
 
 export const useChangeAutoRefreshInterval = (interval: {

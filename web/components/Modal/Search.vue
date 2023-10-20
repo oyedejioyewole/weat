@@ -36,7 +36,7 @@ const searchForCity = async (payload: { limit: number; location: string }) => {
         searchForCity({ limit: settings.numberOfCities, location })
       "
     >
-      <PhosphorIconMagnifyingGlass size="30" />
+      <LazyPhosphorIconMagnifyingGlass size="30" />
       <input
         class="w-full bg-inherit px-5 outline-none 2xl:text-lg"
         placeholder="e.g. Washington"
@@ -72,6 +72,7 @@ const searchForCity = async (payload: { limit: number; location: string }) => {
           <h1 slot="headline" class="2xl:text-lg">{{ location.name }}</h1>
           <p slot="supporting-text" class="2xl:text-md text-sm">
             {{ location.country }}
+            {{ location.state ? "- " + location.state : "" }}
           </p>
           <LazyPhosphorIconCaretRight size="22" slot="end" />
         </md-list-item>

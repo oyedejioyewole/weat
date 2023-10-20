@@ -136,6 +136,18 @@ declare global {
       country: string;
       state?: string;
     }[];
+    reverseGeocoding: {
+      country: string;
+      lat: number;
+      local_names: {
+        [language: string]: string;
+        ascii: string;
+        feature_name: string;
+      };
+      lon: number;
+      name: string;
+      state?: string;
+    }[];
   }
 
   interface Options {
@@ -152,6 +164,7 @@ declare global {
         | "clear"
         | "clouds";
     };
+    settingsView: "advanced" | "basic" | "none";
     units: "imperial" | "metric" | "standard";
   }
 

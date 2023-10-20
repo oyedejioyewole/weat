@@ -1,8 +1,9 @@
 <script setup lang="ts">
 const { $toast } = useNuxtApp();
 const settings = useSettings();
+const state = useStore();
 
-const settingsView = ref<"basic" | "advanced">("basic");
+console.log(state.value.modal);
 
 watchDebounced(
   settings,
@@ -24,21 +25,21 @@ watchDebounced(
   },
   {
     debounce: settings.value.features.autoReloadOnSettingsChange.timeout,
-    maxWait: settings.value.features.autoReloadOnSettingsChange.timeout + 1000,
     deep: true,
+    maxWait: settings.value.features.autoReloadOnSettingsChange.timeout + 1000,
   },
 );
 </script>
 
 <template>
   <div class="space-y-5" v-auto-animate>
-    <ModalSettingsBasicBase class="space-y-5" v-if="settingsView === 'basic'" />
-    <ModalSettingsAdvanced class="space-y-5" v-else />
-
-    <md-filled-button
-      @click="settingsView = settingsView === 'advanced' ? 'basic' : 'advanced'"
-    >
-      {{ settingsView === "advanced" ? "Go back" : "Advanced" }}
-    </md-filled-button>
+    <ModalSettingsBasicBase
+      class="space-y-5"
+      v-if="state.modal.settingsView === 'basic'"
+    />
+    <ModalSettingsAdvanced
+      class="space-y-5"
+      v-else-if="state.modal.settingsView === 'advanced'"
+    />
   </div>
 </template>

@@ -42,6 +42,16 @@ const whenClosed = () => {
         v-show="state.modal.type === 'search'"
         >Search</md-filled-button
       >
+
+      <md-filled-button
+        v-show="state.modal.type === 'settings'"
+        @click="
+          state.modal.settingsView =
+            state.modal.settingsView === 'advanced' ? 'basic' : 'advanced'
+        "
+      >
+        {{ state.modal.settingsView === "advanced" ? "Go back" : "Advanced" }}
+      </md-filled-button>
     </div>
   </md-dialog>
 </template>

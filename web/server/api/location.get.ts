@@ -1,8 +1,6 @@
 import { z } from "zod";
 
-export default defineEventHandler(async (event) => {
-  const query = getQuery(event);
-
+const validateRequest = (payload: {}) => {
   const schema = z
     .object({
       count: z.coerce.number().min(1).max(8),
@@ -11,15 +9,27 @@ export default defineEventHandler(async (event) => {
     })
     .strict();
 
-  const response = schema.safeParse(query);
+  const response = schema.safeParse(payload);
 
-  if (!response.success)
-    throw createError({ message: "Oops, validation failed", statusCode: 400 });
+  switch (response.success) {
+    case true:
+      return response.data;
+    case false:
+      throw createError({
+        message: "Oops, validation failed",
+        stack: response.error.stack,
+        statusCode: 400,
+      });
+  }
+};
 
+export default defineEventHandler(async (event) => {
+  const query = getQuery(event);
+
+  const { count, ip, unit } = validateRequest(query);
   const { ipinfo } = useRuntimeConfig();
-  const { ip, unit, count } = response.data;
 
-  const ipResponse = await $fetch<IpInfoResponse>(`/${ip}`, {
+  const ipResponse = await $fetch<IpInfoResponse>(ip, {
     baseURL: ipinfo.base,
     query: {
       token: ipinfo.token,

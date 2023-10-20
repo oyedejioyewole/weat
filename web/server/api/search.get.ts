@@ -1,28 +1,34 @@
 import { z } from "zod";
 
-export default defineEventHandler(async (event) => {
-  const query = getQuery(event);
-
+const validateRequest = (payload: {}) => {
   const schema = z
     .object({
       location: z.string(),
-      limit: z.coerce.number().min(1).max(3)
+      limit: z.coerce.number().min(1).max(5),
     })
     .strict();
 
-  const response = schema.safeParse(query);
+  const response = schema.safeParse(payload);
 
-  if (!response.success)
-    throw createError({
-      message: "Oops, validation failed",
-      statusCode: 400,
-      stack: "",
-    });
+  switch (response.success) {
+    case true:
+      return response.data;
+    case false:
+      throw createError({
+        message: "Oops, validation failed",
+        stack: response.error.stack,
+        statusCode: 400,
+      });
+  }
+};
 
+export default defineEventHandler(async (event) => {
+  const query = getQuery(event);
+
+  const { limit, location } = validateRequest(query);
   const { openweathermap } = useRuntimeConfig();
-  const { location, limit } = response.data;
 
-  const locations = await $fetch<OpenWeatherMapResponses["geocoding"]>(
+  const geocodingResults = await $fetch<OpenWeatherMapResponses["geocoding"]>(
     `/geo/1.0/direct`,
     {
       baseURL: openweathermap.base,
@@ -31,13 +37,23 @@ export default defineEventHandler(async (event) => {
         limit,
         q: location,
       },
+      onResponse: async ({ response }) => {
+        if ((response._data as []).length === 0) {
+          throw createError({
+            message: "Oops, couldn't find location searched for",
+            stack: "",
+            statusCode: 404,
+          });
+        }
+      },
     },
   );
 
-  return locations.map(({ lat, lon, country, name }) => ({
+  return geocodingResults.map(({ lat, lon, country, name, state }) => ({
     country: new Intl.DisplayNames(["en"], { type: "region" }).of(country),
     latitude: lat,
     longitude: lon,
     name,
+    state,
   }));
 });

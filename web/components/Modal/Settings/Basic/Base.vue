@@ -8,6 +8,23 @@ const settings = useSettings();
 const intervalType = ref<Options["intervals"]>("hours");
 
 const showAutoRefreshAdvancedOptions = ref(false);
+const showUseHomeCityAdvancedOptions = ref(false);
+const areSuggestedHomeCitiesLoading = ref(false);
+
+const { data: searchResult } = useNuxtData<Responses["search"]>("search");
+
+const onHomeCitySwitchInput = useDebounceFn(
+  async (event: InputEvent) => {
+    areSuggestedHomeCitiesLoading.value = true;
+    await useSearch({
+      limit: 5,
+      location: (event.target as HTMLInputElement).value,
+    });
+    areSuggestedHomeCitiesLoading.value = false;
+  },
+  1500,
+  { maxWait: 3000 },
+);
 </script>
 
 <template>
@@ -89,6 +106,73 @@ const showAutoRefreshAdvancedOptions = ref(false);
       </div>
     </li>
 
+    <!-- Home city -->
+    <li class="space-y-4">
+      <div class="flex items-center justify-between">
+        <label>Use a home city, instead of approximate location</label>
+        <md-switch
+          icons
+          :selected="settings.features.homeCity.enabled"
+          @click="
+            settings.features.homeCity.enabled =
+              !settings.features.homeCity.enabled
+          "
+        />
+      </div>
+
+      <md-text-button
+        class="transition"
+        :class="{
+          'relative before:absolute before:-top-[0.1rem] before:right-0 before:aspect-square before:w-[0.6rem] before:animate-pulse before:rounded-full before:bg-[--md-sys-color-primary]':
+            !settings.features.homeCity.city.latitude &&
+            !settings.features.homeCity.city.longitude &&
+            settings.features.homeCity.enabled,
+        }"
+        @click="
+          showUseHomeCityAdvancedOptions = !showUseHomeCityAdvancedOptions
+        "
+        >View more
+      </md-text-button>
+
+      <div
+        class="flex items-center justify-between"
+        v-show="showUseHomeCityAdvancedOptions"
+      >
+        <label v-once v-show="settings.features.homeCity.city.name"
+          >Current: {{ settings.features.homeCity.city.name }}</label
+        >
+        <md-outlined-text-field
+          class="ml-auto block w-[30%]"
+          label="Home city"
+          @input="onHomeCitySwitchInput"
+        >
+          <md-circular-progress
+            id="loading"
+            indeterminate
+            slot="trailing-icon"
+            v-if="areSuggestedHomeCitiesLoading"
+          />
+        </md-outlined-text-field>
+      </div>
+
+      <div v-if="searchResult">
+        <md-chip-set>
+          <md-suggestion-chip
+            v-for="(result, index) of searchResult"
+            @click="
+              settings.features.homeCity.city = {
+                latitude: result.latitude,
+                longitude: result.longitude,
+                name: `${result.name} in ${result.state}`,
+              }
+            "
+            :key="index"
+            :label="`${result.name} ${result.state ? '- ' + result.state : ''}`"
+          ></md-suggestion-chip>
+        </md-chip-set>
+      </div>
+    </li>
+
     <!-- Use precise location (switch) -->
     <li class="flex items-center justify-between">
       <label class="2xl:text-lg" for="geolocation-switch"
@@ -129,3 +213,9 @@ const showAutoRefreshAdvancedOptions = ref(false);
     </li>
   </ul>
 </template>
+
+<style scoped>
+#loading {
+  --md-circular-progress-size: 30px;
+}
+</style>

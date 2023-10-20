@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 const state = useStore();
 
-const { data: weatherInformation } =
-  useNuxtData<Responses["forecast"]>("forecast");
+const { data: weather } = useNuxtData<Responses["forecast"]>("forecast");
 
 const { width } = useWindowSize();
 </script>
 
 <template>
-  <section v-if="weatherInformation">
+  <section v-if="weather">
     <!-- Forecast group -->
     <div class="space-y-5 px-5">
       <!-- Overview (only on phones and tablets) -->
@@ -50,7 +49,7 @@ const { width } = useWindowSize();
       >
         <SwiperSlide
           class="space-y-4 rounded-2xl bg-[--md-sys-color-on-primary] p-5 2xl:p-10"
-          v-for="(forecast, index) of weatherInformation.forecast"
+          v-for="(forecast, index) of weather.forecast"
           :key="index"
         >
           <!-- Forecasted for -->
@@ -70,7 +69,7 @@ const { width } = useWindowSize();
             class="flex flex-col items-center sm:flex-row md:float-right 2xl:gap-x-4"
           >
             <!-- Icon -->
-            <NuxtImg
+            <LazyNuxtImg
               format="webp"
               height="56"
               sizes="2xl:144px 56px"
@@ -107,7 +106,7 @@ const { width } = useWindowSize();
           </h2>
 
           <p class="float-right font-serif 2xl:text-3xl">
-            {{ weatherInformation.cloudiness }}
+            {{ weather.cloudiness }}
           </p>
         </li>
 
@@ -123,7 +122,7 @@ const { width } = useWindowSize();
           </h2>
 
           <p class="float-right font-serif 2xl:text-3xl">
-            {{ weatherInformation.humidity }}
+            {{ weather.humidity ? weather.humidity : "N/A" }}
           </p>
         </li>
 
@@ -139,8 +138,7 @@ const { width } = useWindowSize();
           </h2>
 
           <p class="font-serif 2xl:text-3xl">
-            {{ weatherInformation.pressure }}
-            hPa
+            {{ weather.pressure ? weather.pressure : "N/A" }}
           </p>
         </li>
 
@@ -156,7 +154,7 @@ const { width } = useWindowSize();
           </h2>
 
           <p class="float-right font-serif 2xl:text-3xl">
-            {{ weatherInformation.visibility }} km
+            {{ weather.visibility ? weather.visibility : "N/A" }}
           </p>
         </li>
       </ul>
@@ -171,7 +169,7 @@ const { width } = useWindowSize();
         >
           <h1 class="2xl:text-2xl">Feels like:</h1>
           <p class="font-serif 2xl:text-3xl">
-            {{ weatherInformation.temperature.feelsLike }}
+            {{ weather.temperature.feelsLike }}
           </p>
         </li>
         <li
@@ -184,7 +182,7 @@ const { width } = useWindowSize();
             >
               <h1 class="text-sm 2xl:text-xl">Direction:</h1>
               <p class="font-serif 2xl:text-3xl">
-                {{ weatherInformation.wind.degree }}&deg;
+                {{ weather.wind.degree ? weather.wind.degree : "N/A" }}
               </p>
             </li>
             <li
@@ -192,7 +190,7 @@ const { width } = useWindowSize();
             >
               <h1 class="text-sm 2xl:text-xl">Gust:</h1>
               <p class="font-serif 2xl:text-3xl">
-                {{ weatherInformation.wind.gust }}
+                {{ weather.wind.gust ? weather.wind.gust : "N/A" }}
               </p>
             </li>
             <li
@@ -200,7 +198,7 @@ const { width } = useWindowSize();
             >
               <h1 class="text-sm 2xl:text-xl">Speed:</h1>
               <p class="font-serif 2xl:text-3xl">
-                {{ weatherInformation.wind.speed }}
+                {{ weather.wind.speed ? weather.wind.speed : "N/A" }}
               </p>
             </li>
           </ul>
@@ -215,7 +213,7 @@ const { width } = useWindowSize();
         >
           <h1 class="2xl:text-2xl">Sunrise:</h1>
           <p class="font-serif 2xl:text-3xl">
-            {{ weatherInformation.sunrise }}
+            {{ weather.sunrise }}
           </p>
         </li>
         <li
@@ -223,7 +221,7 @@ const { width } = useWindowSize();
         >
           <h1 class="2xl:text-2xl">Sunset:</h1>
           <p class="font-serif 2xl:text-3xl">
-            {{ weatherInformation.sunset }}
+            {{ weather.sunset }}
           </p>
         </li>
       </ul>

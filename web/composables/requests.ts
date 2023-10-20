@@ -22,38 +22,41 @@ export const useGetForecast = async (
 
   const { $toast } = useNuxtApp();
 
-  if (typeof query === "object")
-    await useFetch("/api/forecast", {
-      body: {
-        count,
-        latitude: query.latitude,
-        longitude: query.longitude,
-        unit,
-      },
-      key: "forecast",
-      method: "POST",
-      onRequestError: () => {
-        $toast.error("Couldn't get the weather forecast", {
-          description: "Try reloading this page",
-        });
-      },
-      retry: 1,
-    });
-  else
-    await useFetch("/api/location", {
-      key: "forecast",
-      onRequestError: () => {
-        $toast.error("Couldn't get the weather forecast", {
-          description: "Try reloading this page",
-        });
-      },
-      query: {
-        count,
-        ip: query,
-        unit,
-      },
-      retry: 1,
-    });
+  switch (typeof query) {
+    case "object":
+      await useFetch("/api/forecast", {
+        body: {
+          count,
+          latitude: query.latitude,
+          longitude: query.longitude,
+          unit,
+        },
+        key: "forecast",
+        method: "POST",
+        onRequestError: () => {
+          $toast.error("Couldn't get the weather forecast", {
+            description: "Try reloading this page",
+          });
+        },
+        retry: 1,
+      });
+      break;
+    case "string":
+      await useFetch("/api/location", {
+        key: "forecast",
+        onRequestError: () => {
+          $toast.error("Couldn't get the weather forecast", {
+            description: "Try reloading this page",
+          });
+        },
+        query: {
+          count,
+          ip: query,
+          unit,
+        },
+        retry: 1,
+      });
+  }
 
   if (isDesktopOrTablet && !state.value.tipShown) {
     $toast.message("Tip", {
@@ -63,8 +66,11 @@ export const useGetForecast = async (
   }
 };
 
-export const useSearch = (payload: { limit: number, location: string }) =>
-  useFetch("/api/search", {
+export const useSearch = async (payload: {
+  limit: number;
+  location: string;
+}) => {
+  await useFetch("/api/search", {
     key: "search",
     onRequestError: () => {
       const { $toast } = useNuxtApp();
@@ -73,6 +79,20 @@ export const useSearch = (payload: { limit: number, location: string }) =>
         description: "Try checking your internet connection",
       });
     },
-    query: { limit: payload.limit, location: payload.location },
     retry: 1,
+    query: { limit: payload.limit, location: payload.location },
   });
+};
+
+export const useGeocoder = async (payload: {
+  latitude: number;
+  longitude: number;
+}) => {
+  await useFetch("/api/geocoder", {
+    body: {
+      latitude: payload.latitude,
+      longitude: payload.longitude,
+    },
+    method: "POST",
+  });
+};

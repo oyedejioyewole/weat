@@ -22,7 +22,7 @@ const onInput = (
 
       if (valid)
         settings.value.numberOfCities =
-          parseInt((event.target as HTMLInputElement).value) || 1;
+          parseInt((event.target as HTMLInputElement).value) || 5;
     }
   } else {
     const [startTimeHour] = startTime.value.split(":");
@@ -114,7 +114,7 @@ const onInput = (
           <md-outlined-text-field
             label="No."
             min="1"
-            max="3"
+            max="5"
             ref="input"
             type="number"
             @input="onInput($event, 'searchResults')"
@@ -124,6 +124,7 @@ const onInput = (
       </div>
     </li>
 
+    <!-- Number of forecasts -->
     <li class="space-y-3">
       <div class="flex items-center justify-between">
         <div class="w-1/2 space-y-4">
